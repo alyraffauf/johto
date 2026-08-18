@@ -1,0 +1,35 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: paperless-cute-haus
+  namespace: paperless
+spec:
+  dnsNames:
+    - paperless.cute.haus
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: paperless-cute-haus-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: paperless
+  namespace: paperless
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: paperless.cute.haus
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: paperless
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - paperless.cute.haus
+      secretName: paperless-cute-haus-tls
