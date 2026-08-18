@@ -22,6 +22,17 @@ keys:
   - &host_sootopolis age1gz3835qckr54gn44znlefa6m7yvjx83gptq8keslyq944nfxsfzqndenmt
 
 creation_rules:
+  - path_regex: ^k8s/secrets/.*\.sops\.ya?ml$
+    key_groups:
+      - age:
+          - *user_aly_fortree
+          - *user_aly_jubilife
+          - *user_aly_mauville
+          - *user_aly_pacifidlog
+          - *user_aly_petalburg
+          - *user_aly_rustboro
+          - *user_aly_sootopolis
+          - *host_olivine
   - path_regex: ^secrets/.*\.ya?ml$
     key_groups:
       - age:
