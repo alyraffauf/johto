@@ -8,7 +8,3 @@ resources:
   - ingress.yaml
   - letsencrypt.yaml
   - media.yaml
-  - private-ingress.yaml
-  - secrets.yaml
-  - tailscale-private-ingress.yaml
-  - tailscale.yaml
