@@ -1,0 +1,35 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ombi-cute-haus
+  namespace: ombi
+spec:
+  dnsNames:
+    - ombi.cute.haus
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: ombi-cute-haus-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ombi
+  namespace: ombi
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: ombi.cute.haus
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ombi
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - ombi.cute.haus
+      secretName: ombi-cute-haus-tls

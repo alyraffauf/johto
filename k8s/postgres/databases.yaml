@@ -23,6 +23,17 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
+  name: ombi
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: ombi
+  owner: ombi
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
   name: bazarr
   namespace: cnpg-system
 spec:

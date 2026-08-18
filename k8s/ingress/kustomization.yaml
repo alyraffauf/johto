@@ -7,3 +7,4 @@ resources:
   - plex.yaml
   - uptime-kuma.yaml
   - watsup.yaml
+  - ombi.yaml

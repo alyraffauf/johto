@@ -54,6 +54,12 @@ url = "https://kuma.cute.haus"
 icon = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/uptime-kuma.png"
 
 [[sections.services]]
+name = "Ombi"
+url = "https://ombi.cute.haus"
+healthUrl = "http://ombi.ombi.svc.cluster.local/"
+icon = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/ombi.png"
+
+[[sections.services]]
 name = "Navidrome"
 url = "https://navidrome.narwhal-snapper.ts.net"
 healthUrl = "http://navidrome.arr.svc.cluster.local/"

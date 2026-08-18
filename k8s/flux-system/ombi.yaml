@@ -1,20 +1,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: ingress
+  name: ombi
   namespace: flux-system
 spec:
   dependsOn:
-    - name: letsencrypt
-    - name: plex
-    - name: paperless
-    - name: nextcloud
-    - name: immich
-    - name: uptime-kuma
-    - name: watsup
-    - name: ombi
+    - name: postgres
+    - name: secrets
+  suspend: true
   interval: 10m
-  path: ./k8s/ingress
+  path: ./k8s/ombi
   prune: true
   sourceRef:
     kind: GitRepository

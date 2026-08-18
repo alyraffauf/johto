@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ombi
+  namespace: ombi
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: ombi
+  template:
+    metadata:
+      labels:
+        app: ombi
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
+      securityContext:
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: database-configuration
+          image: lscr.io/linuxserver/ombi:latest@sha256:a89d63c66cd139a8515773749237a0a3cb114a62b092abd4fa2df6b144a2613f
+          command:
+            - sh
+            - -c
+            - cp /credentials/database.json /config/database.json
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: database-configuration
+              mountPath: /credentials
+              readOnly: true
+      containers:
+        - name: ombi
+          image: lscr.io/linuxserver/ombi:latest@sha256:a89d63c66cd139a8515773749237a0a3cb114a62b092abd4fa2df6b144a2613f
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: America/New_York
+          ports:
+            - name: http
+              containerPort: 3579
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          emptyDir: {}
+        - name: database-configuration
+          secret:
+            secretName: ombi-database-configuration
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ombi
+  namespace: ombi
+spec:
+  selector:
+    app: ombi
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

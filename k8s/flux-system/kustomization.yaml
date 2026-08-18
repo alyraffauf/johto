@@ -19,3 +19,4 @@ resources:
   - tailscale.yaml
   - uptime-kuma.yaml
   - watsup.yaml
+  - ombi.yaml
