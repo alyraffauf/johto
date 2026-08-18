@@ -41,10 +41,8 @@ spec:
               mountPath: /config
             - name: media
               mountPath: /mnt/Media
-              readOnly: true
             - name: backblaze
               mountPath: /mnt/Backblaze
-              readOnly: true
             - name: dri
               mountPath: /dev/dri
       volumes:

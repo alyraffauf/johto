@@ -108,6 +108,8 @@ spec:
               mountPath: /mnt/Media
             - name: data
               mountPath: /data
+            - name: backblaze
+              mountPath: /mnt/Backblaze
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -119,6 +121,10 @@ spec:
         - name: data
           hostPath:
             path: /mnt/Data
+            type: Directory
+        - name: backblaze
+          hostPath:
+            path: /mnt/Backblaze
             type: Directory
         - name: legacy-config
           hostPath:
