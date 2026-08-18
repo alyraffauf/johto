@@ -25,4 +25,4 @@ spec:
       logDatabase: radarr_log
       mainDatabase: radarr_main
     legacyConfig:
-      path: /var/lib/radarr/.config/Radarr
+      path: /mnt/Data/radarr/.config/Radarr

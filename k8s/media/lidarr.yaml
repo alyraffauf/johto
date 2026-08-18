@@ -25,4 +25,4 @@ spec:
       logDatabase: lidarr_log
       mainDatabase: lidarr_main
     legacyConfig:
-      path: /var/lib/lidarr/.config/Lidarr
+      path: /mnt/Data/lidarr/.config/Lidarr

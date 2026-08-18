@@ -25,4 +25,4 @@ spec:
       mainDatabase: bazarr
     legacyConfig:
       format: yaml
-      path: /var/lib/bazarr
+      path: /mnt/Data/bazarr
