@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: paperless
+  namespace: paperless
+spec:
+  selector: {app: paperless}
+  ports: [{name: http, port: 80, targetPort: 8000}]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: valkey
+  namespace: paperless
+spec:
+  selector: {app: valkey}
+  ports: [{port: 6379}]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tika
+  namespace: paperless
+spec:
+  selector: {app: tika}
+  ports: [{port: 9998}]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gotenberg
+  namespace: paperless
+spec:
+  selector: {app: gotenberg}
+  ports: [{port: 3000}]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: valkey, namespace: paperless}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: valkey}}
+  template:
+    metadata: {labels: {app: valkey}}
+    spec:
+      nodeSelector: {johto.narwhal-snapper-ts.net/workload: media}
+      containers:
+        - name: valkey
+          image: valkey/valkey:9-alpine@sha256:ee91f7a174ac4d6a6b0685b3a60e321f0a9dbbb691f9b0e285be2ba1d1be8328
+          args: [valkey-server, --maxmemory, 1gb, --maxmemory-policy, volatile-lru]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: tika, namespace: paperless}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: tika}}
+  template:
+    metadata: {labels: {app: tika}}
+    spec:
+      nodeSelector: {johto.narwhal-snapper-ts.net/workload: media}
+      containers:
+        - name: tika
+          image: apache/tika:3.3.1.0-full@sha256:d8e6ed96260ad89307a93195a1b856102987a818ac648502f8efbaf313d32470
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: gotenberg, namespace: paperless}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: gotenberg}}
+  template:
+    metadata: {labels: {app: gotenberg}}
+    spec:
+      nodeSelector: {johto.narwhal-snapper-ts.net/workload: media}
+      containers:
+        - name: gotenberg
+          image: gotenberg/gotenberg:8@sha256:87c16b9f364279d321bc9772d31fa58aa6abe036423c270698bd636c3a8e9466
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: paperless, namespace: paperless}
+spec:
+  replicas: 1
+  strategy: {type: Recreate}
+  selector: {matchLabels: {app: paperless}}
+  template:
+    metadata: {labels: {app: paperless}}
+    spec:
+      nodeSelector: {johto.narwhal-snapper-ts.net/workload: media}
+      securityContext: {fsGroup: 1000}
+      containers:
+        - name: paperless
+          image: ghcr.io/paperless-ngx/paperless-ngx:latest@sha256:65a4cabf0169ea7fbd90ab7bb28ba3f8b5909613635acda1a03ad606f34b456b
+          envFrom: [{secretRef: {name: paperless-env}}]
+          env:
+            - {name: PAPERLESS_DBHOST, value: pg-shared-rw.cnpg-system.svc}
+            - {name: PAPERLESS_DBNAME, value: paperless}
+            - {name: PAPERLESS_DBUSER, value: paperless}
+            - {name: PAPERLESS_REDIS, value: redis://valkey:6379/0}
+            - {name: PAPERLESS_TIKA_ENDPOINT, value: http://tika:9998}
+            - {name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT, value: http://gotenberg:3000}
+            - {name: PAPERLESS_URL, value: https://paperless.cute.haus}
+            - {name: PAPERLESS_CONSUMPTION_DIR, value: /paperless/consume}
+            - {name: PAPERLESS_DATA_DIR, value: /paperless/data}
+            - {name: PAPERLESS_MEDIA_ROOT, value: /paperless/media}
+          ports: [{containerPort: 8000}]
+          volumeMounts:
+            - {name: data, mountPath: /paperless/data}
+            - {name: consume, mountPath: /paperless/consume}
+            - {name: media, mountPath: /paperless/media}
+      volumes:
+        - {name: data, hostPath: {path: /mnt/Data/paperless/data, type: Directory}}
+        - {name: consume, hostPath: {path: /mnt/Data/paperless/consume, type: Directory}}
+        - {name: media, hostPath: {path: /mnt/Data/paperless/media, type: Directory}}
