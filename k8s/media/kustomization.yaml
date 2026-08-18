@@ -5,6 +5,7 @@ resources:
   - storage.yaml
   - postgres.yaml
   - plex.yaml
+  - navidrome.yaml
   - bazarr.yaml
   - lidarr.yaml
   - prowlarr.yaml

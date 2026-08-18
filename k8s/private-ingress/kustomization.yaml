@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - bazarr.yaml
   - lidarr.yaml
+  - navidrome.yaml
   - prowlarr.yaml
   - radarr.yaml
   - sonarr.yaml
