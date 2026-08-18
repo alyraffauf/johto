@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: tranquil
+  namespace: cnpg-system
+spec:
+  name: tranquil
+  owner: tranquil
+  cluster:
+    name: pg-shared

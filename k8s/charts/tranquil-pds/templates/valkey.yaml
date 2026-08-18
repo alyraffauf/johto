@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tranquil-pds-valkey
+  labels:
+    app: tranquil-pds-valkey
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: tranquil-pds-valkey
+  template:
+    metadata:
+      labels:
+        app: tranquil-pds-valkey
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      nodeSelector:
+        kubernetes.io/hostname: sunnyshore
+      containers:
+        - name: valkey
+          image: valkey/valkey:9-alpine@sha256:ee91f7a174ac4d6a6b0685b3a60e321f0a9dbbb691f9b0e285be2ba1d1be8328
+          args:
+            - valkey-server
+            - --appendonly
+            - "yes"
+            - --appendfsync
+            - everysec
+            - --maxmemory
+            - 256mb
+            - --maxmemory-policy
+            - volatile-lru
+          ports:
+            - name: valkey
+              containerPort: 6379
+          resources: {{ .Values.valkey.resources | toYaml | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          startupProbe:
+            tcpSocket:
+              port: valkey
+            periodSeconds: 5
+            failureThreshold: 12
+          livenessProbe:
+            tcpSocket:
+              port: valkey
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: valkey
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: tranquil-pds-valkey-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tranquil-pds-valkey
+  labels:
+    app: tranquil-pds-valkey
+spec:
+  selector:
+    app: tranquil-pds-valkey
+  ports:
+    - name: valkey
+      port: 6379
+      targetPort: valkey

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: tranquil-pds
+description: Tranquil AT Protocol personal data server
+type: application
+version: 0.1.0

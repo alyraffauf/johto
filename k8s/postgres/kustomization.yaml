@@ -4,4 +4,5 @@ resources:
   - cluster.yaml
   - pocket-id-database.yaml
   - vaultwarden-database.yaml
+  - tranquil-database.yaml
   - scheduled-backup.yaml

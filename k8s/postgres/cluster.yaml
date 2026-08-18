@@ -34,3 +34,7 @@ spec:
         login: true
         passwordSecret:
           name: vaultwarden-pg-creds
+      - name: tranquil
+        login: true
+        passwordSecret:
+          name: tranquil-pg-creds

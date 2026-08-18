@@ -1,0 +1,37 @@
+{{- if .Values.publicIngress.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tranquil-pds
+spec:
+  secretName: tranquil-pds-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: {{ .Values.publicIngress.clusterIssuer }}
+  dnsNames:
+    {{- toYaml .Values.hosts | nindent 4 }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tranquil-pds
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        {{- toYaml .Values.hosts | nindent 8 }}
+      secretName: tranquil-pds-tls
+  rules:
+    {{- range .Values.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tranquil-pds
+                port:
+                  number: 80
+    {{- end }}
+{{- end }}

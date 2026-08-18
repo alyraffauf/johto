@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tranquil-pds-valkey-data
+  labels:
+    app: tranquil-pds-valkey
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.valkey.storage.className }}
+  resources:
+    requests:
+      storage: {{ .Values.valkey.storage.size }}
