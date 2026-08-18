@@ -145,13 +145,16 @@ spec:
                 sed -i \
                   -e "s/'dbhost' => 'postgres'/'dbhost' => 'pg-shared-rw.cnpg-system.svc'/" \
                   -e "s/'host' => 'nextcloud-valkey'/'host' => 'valkey'/" \
-                  -e "s/'host' => 'host.docker.internal'/'host' => '10.254.2.3'/" \
-                  -e "s/'host' => '10.254.0.1'/'host' => '10.254.2.3'/" \
                   "$config"
               elif ! grep -Fq "'dbhost' => 'pg-shared-rw.cnpg-system.svc'" "$config"; then
                 echo "unexpected Nextcloud database host" >&2
                 exit 1
               fi
+
+              sed -i \
+                -e "s/'hostname' => 'host.docker.internal'/'hostname' => '10.254.2.3'/" \
+                -e "s/'hostname' => '10.254.0.1'/'hostname' => '10.254.2.3'/" \
+                "$config"
               exec /entrypoint.sh apache2-foreground
           envFrom:
             - secretRef:
