@@ -98,7 +98,7 @@ spec:
             - name: DONT_GEN_SSL_CERT
               value: "true"
             - name: aliasgroup1
-              value: https://nextcloud\\.cute\\.haus
+              value: https://nextcloud\.cute\.haus
             - name: extra_params
               value: --o:ssl.enable=false --o:ssl.termination=true
             - name: server_name
