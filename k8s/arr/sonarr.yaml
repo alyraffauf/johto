@@ -15,7 +15,7 @@ spec:
       version: 0.1.0
   interval: 30m
   releaseName: sonarr
-  targetNamespace: media
+  targetNamespace: arr
   values:
     app:
       name: sonarr

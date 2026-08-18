@@ -5,7 +5,8 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-    - name: media
+    - name: arr
+    - name: plex
     - name: tailscale-private-ingress
   interval: 10m
   path: ./k8s/private-ingress

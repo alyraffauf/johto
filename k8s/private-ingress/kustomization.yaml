@@ -7,3 +7,4 @@ resources:
   - prowlarr.yaml
   - radarr.yaml
   - sonarr.yaml
+  - tautulli.yaml

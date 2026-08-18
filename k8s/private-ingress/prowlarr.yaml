@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: prowlarr-johto
-  namespace: media
+  namespace: arr
   annotations:
     tailscale.com/proxy-group: private-ingress
 spec:

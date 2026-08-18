@@ -1,15 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sonarr
-  namespace: arr
+  name: tautulli
+  namespace: plex
   annotations:
     tailscale.com/proxy-group: private-ingress
 spec:
   ingressClassName: tailscale
   tls:
     - hosts:
-        - sonarr
+        - tautulli
   rules:
     - http:
         paths:
@@ -17,6 +17,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: sonarr
+                name: tautulli
                 port:
                   name: http

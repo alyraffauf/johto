@@ -8,9 +8,10 @@ resources:
   - ingress.yaml
   - immich.yaml
   - letsencrypt.yaml
-  - media.yaml
+  - arr.yaml
   - nextcloud.yaml
   - paperless.yaml
+  - plex.yaml
   - postgres.yaml
   - private-ingress.yaml
   - secrets.yaml

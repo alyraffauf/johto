@@ -14,6 +14,6 @@ spec:
       version: 0.1.0
   interval: 30m
   releaseName: navidrome
-  targetNamespace: media
+  targetNamespace: arr
   values:
     replicaCount: 1
