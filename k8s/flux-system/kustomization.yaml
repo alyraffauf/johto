@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - cert-manager.yaml
   - cnpg.yaml
+  - barman-cloud.yaml
   - gotk-components.yaml
   - gotk-sync.yaml
   - ingress.yaml
@@ -13,6 +14,7 @@ resources:
   - paperless.yaml
   - plex.yaml
   - postgres.yaml
+  - postgres-backups.yaml
   - private-ingress.yaml
   - secrets.yaml
   - tailscale-private-ingress.yaml
