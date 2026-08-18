@@ -9,7 +9,7 @@ spec:
   ingressClassName: tailscale
   tls:
     - hosts:
-        - prowlarr-johto
+        - prowlarr
   rules:
     - http:
         paths:
