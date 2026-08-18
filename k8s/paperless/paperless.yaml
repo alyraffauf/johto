@@ -95,6 +95,10 @@ spec:
           image: ghcr.io/paperless-ngx/paperless-ngx:latest@sha256:65a4cabf0169ea7fbd90ab7bb28ba3f8b5909613635acda1a03ad606f34b456b
           envFrom: [{secretRef: {name: paperless-env}}]
           env:
+            # The Service is intentionally named `paperless`; explicitly set
+            # the application port so Kubernetes' legacy service variables
+            # cannot override it.
+            - {name: PAPERLESS_PORT, value: "8000"}
             - {name: PAPERLESS_DBHOST, value: pg-shared-rw.cnpg-system.svc}
             - {name: PAPERLESS_DBNAME, value: paperless}
             - {name: PAPERLESS_DBUSER, value: paperless}
