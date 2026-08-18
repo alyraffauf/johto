@@ -8,3 +8,4 @@ resources:
   - traefik.yaml
   - aly-codes.yaml
   - switchyard.yaml
+  - morsels.yaml
