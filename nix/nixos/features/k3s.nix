@@ -17,8 +17,8 @@ _: {
     };
 
     systemd.services.k3s = {
-      after = ["wireguard-johto.service"];
-      wants = ["wireguard-johto.service"];
+      after = ["wireguard-johto.target"];
+      wants = ["wireguard-johto.target"];
     };
   };
 }
