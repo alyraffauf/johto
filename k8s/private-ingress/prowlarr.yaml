@@ -11,7 +11,8 @@ spec:
     - hosts:
         - prowlarr-johto
   rules:
-    - http:
+    - host: prowlarr-johto
+      http:
         paths:
           - path: /
             pathType: Prefix
