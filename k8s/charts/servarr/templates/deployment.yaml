@@ -113,11 +113,13 @@ spec:
           persistentVolumeClaim:
             claimName: {{ $name }}-config
         - name: library
-          persistentVolumeClaim:
-            claimName: media-library
+          hostPath:
+            path: /mnt/Media
+            type: Directory
         - name: data
-          persistentVolumeClaim:
-            claimName: media-data
+          hostPath:
+            path: /mnt/Data
+            type: Directory
         - name: legacy-config
           hostPath:
             path: {{ $legacyConfigPath }}
