@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lidarr
+  namespace: media
+  annotations:
+    tailscale.com/proxy-group: private-ingress
+spec:
+  ingressClassName: tailscale
+  tls:
+    - hosts:
+        - lidarr
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lidarr
+                port:
+                  name: http
