@@ -1,0 +1,98 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: bazarr
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: bazarr
+  owner: media
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: lidarr-main
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: lidarr_main
+  owner: media
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: lidarr-log
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: lidarr_log
+  owner: media
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: prowlarr-main
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: prowlarr_main
+  owner: media
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: prowlarr-log
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: prowlarr_log
+  owner: media
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: radarr-main
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: radarr_main
+  owner: media
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: radarr-log
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: radarr_log
+  owner: media
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: sonarr-main
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: sonarr_main
+  owner: media
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: sonarr-log
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: sonarr_log
+  owner: media
