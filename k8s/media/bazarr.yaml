@@ -21,4 +21,8 @@ spec:
       name: bazarr
       port: 6767
       image: lscr.io/linuxserver/bazarr@sha256:45a0ba295f5ca41c2cf1853ecedc099fb6f23dabbc80b8c1a73cd85eb195b60c
-    databaseSecretName: bazarr-postgres
+    database:
+      mainDatabase: bazarr
+    legacyConfig:
+      format: yaml
+      path: /var/lib/bazarr

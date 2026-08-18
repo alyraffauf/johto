@@ -21,4 +21,8 @@ spec:
       name: prowlarr
       port: 9696
       image: lscr.io/linuxserver/prowlarr@sha256:1295cff29d10b486c0d8324d1559a552140a5932bf8b3d87e398654414f63f92
-    databaseSecretName: prowlarr-postgres
+    database:
+      logDatabase: prowlarr_log
+      mainDatabase: prowlarr_main
+    legacyConfig:
+      path: /var/lib/private/prowlarr

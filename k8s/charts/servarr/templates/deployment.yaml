@@ -1,7 +1,10 @@
 {{- $name := required "app.name is required" .Values.app.name }}
 {{- $port := required "app.port is required" .Values.app.port }}
 {{- $image := required "app.image is required" .Values.app.image }}
-{{- $databaseSecretName := required "databaseSecretName is required" .Values.databaseSecretName }}
+{{- $databaseSecretName := required "database.secretName is required" .Values.database.secretName }}
+{{- $mainDatabase := required "database.mainDatabase is required" .Values.database.mainDatabase }}
+{{- $legacyConfigPath := required "legacyConfig.path is required" .Values.legacyConfig.path }}
+{{- $legacyConfigFormat := required "legacyConfig.format is required" .Values.legacyConfig.format }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,12 +19,83 @@ spec:
       labels:
         app.kubernetes.io/name: {{ $name }}
     spec:
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
+      initContainers:
+        - name: prepare-config
+          image: docker.io/library/busybox@sha256:9db7b59979c38555a39def84a31fb98b5296952f9e3afd4f6f11f05b07adfab0
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              if [ -z "$(find /config -mindepth 1 -print -quit)" ]; then
+                cp -a /legacy/. /config/
+              fi
+
+              {{- if eq $legacyConfigFormat "xml" }}
+              config_file=/config/config.xml
+              sed -i '/<Postgres\(Host\|Port\|User\|Password\|MainDb\|LogDb\)>/d' "$config_file"
+              sed -i "/<Config>/a\\  <PostgresLogDb>{{ .Values.database.logDatabase }}</PostgresLogDb>\\n  <PostgresMainDb>{{ $mainDatabase }}</PostgresMainDb>\\n  <PostgresPassword>${POSTGRES_PASSWORD}</PostgresPassword>\\n  <PostgresUser>${POSTGRES_USER}</PostgresUser>\\n  <PostgresPort>${POSTGRES_PORT}</PostgresPort>\\n  <PostgresHost>${POSTGRES_HOST}</PostgresHost>" "$config_file"
+              {{- else if eq $legacyConfigFormat "yaml" }}
+              config_file=/config/config/config.yaml
+              awk -v database="{{ $mainDatabase }}" -v host="$POSTGRES_HOST" -v password="$POSTGRES_PASSWORD" -v port="$POSTGRES_PORT" -v user="$POSTGRES_USER" '
+                /^postgresql:/ {
+                  print "postgresql:"
+                  print "  database: \047" database "\047"
+                  print "  enabled: true"
+                  print "  host: \047" host "\047"
+                  print "  password: \047" password "\047"
+                  print "  port: " port
+                  print "  username: \047" user "\047"
+                  in_postgresql = 1
+                  next
+                }
+                in_postgresql && /^[^[:space:]]/ { in_postgresql = 0 }
+                !in_postgresql { print }
+              ' "$config_file" > "$config_file.next"
+              mv "$config_file.next" "$config_file"
+              {{- else }}
+              echo "Unsupported legacy config format: {{ $legacyConfigFormat }}" >&2
+              exit 1
+              {{- end }}
+
+              chown -R 911:911 /config
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: {{ $databaseSecretName }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ $databaseSecretName }}
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: port
+                  name: {{ $databaseSecretName }}
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: {{ $databaseSecretName }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: legacy-config
+              mountPath: /legacy
+              readOnly: true
       containers:
         - name: {{ $name }}
           image: {{ $image | quote }}
-          envFrom:
-            - secretRef:
-                name: {{ $databaseSecretName }}
+          env:
+            - name: PGID
+              value: "911"
+            - name: PUID
+              value: "911"
+            - name: TZ
+              value: America/New_York
           ports:
             - containerPort: {{ $port }}
               name: http
@@ -44,3 +118,7 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: media-data
+        - name: legacy-config
+          hostPath:
+            path: {{ $legacyConfigPath }}
+            type: Directory

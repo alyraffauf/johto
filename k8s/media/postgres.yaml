@@ -1,0 +1,27 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: media-postgres
+  namespace: media
+spec:
+  affinity:
+    nodeSelector:
+      johto.narwhal-snapper-ts.net/workload: media
+  bootstrap:
+    initdb:
+      database: media
+      owner: media
+      postInitSQL:
+        - CREATE DATABASE bazarr OWNER media
+        - CREATE DATABASE lidarr_main OWNER media
+        - CREATE DATABASE lidarr_log OWNER media
+        - CREATE DATABASE prowlarr_main OWNER media
+        - CREATE DATABASE prowlarr_log OWNER media
+        - CREATE DATABASE radarr_main OWNER media
+        - CREATE DATABASE radarr_log OWNER media
+        - CREATE DATABASE sonarr_main OWNER media
+        - CREATE DATABASE sonarr_log OWNER media
+  imageName: ghcr.io/cloudnative-pg/postgresql@sha256:f785551be35036d65a0f1ebe71995022d261a829391fc2f14222ca19795d7c20
+  instances: 1
+  storage:
+    size: 20Gi

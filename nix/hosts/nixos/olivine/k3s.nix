@@ -3,6 +3,8 @@ _: {
     services.k3s = {
       role = "server";
       clusterInit = true;
+      nodeLabel = ["johto.narwhal-snapper-ts.net/workload=ingress"];
+      nodeTaint = ["johto.narwhal-snapper-ts.net/workload=ingress:NoSchedule"];
 
       extraFlags = [
         "--node-ip=10.254.2.2"

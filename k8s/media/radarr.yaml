@@ -21,4 +21,8 @@ spec:
       name: radarr
       port: 7878
       image: lscr.io/linuxserver/radarr@sha256:a45b5ab0f850f39edb4cc9c95bbd967b52ddc3d4574a4dfb45561177db6c88f4
-    databaseSecretName: radarr-postgres
+    database:
+      logDatabase: radarr_log
+      mainDatabase: radarr_main
+    legacyConfig:
+      path: /var/lib/radarr/.config/Radarr

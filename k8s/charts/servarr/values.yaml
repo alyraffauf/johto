@@ -3,7 +3,14 @@ app:
   port: 0
   image: ""
 
-databaseSecretName: ""
+database:
+  secretName: media-postgres-app
+  mainDatabase: ""
+  logDatabase: ""
+
+legacyConfig:
+  path: ""
+  format: xml
 
 config:
   storageClassName: local-path

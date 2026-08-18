@@ -21,4 +21,8 @@ spec:
       name: sonarr
       port: 8989
       image: lscr.io/linuxserver/sonarr@sha256:373159ba768e23a3a1c497d9f2b936addf8fd5b1fdce7dd6a14080ac928bfda0
-    databaseSecretName: sonarr-postgres
+    database:
+      logDatabase: sonarr_log
+      mainDatabase: sonarr_main
+    legacyConfig:
+      path: /var/lib/sonarr/.config/NzbDrone
