@@ -17,3 +17,4 @@ resources:
   - secrets.yaml
   - tailscale-private-ingress.yaml
   - tailscale.yaml
+  - uptime-kuma.yaml
