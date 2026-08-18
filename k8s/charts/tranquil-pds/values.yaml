@@ -8,7 +8,7 @@ hosts:
   - "*.aly.social"
 
 publicIngress:
-  enabled: false
+  enabled: true
   clusterIssuer: letsencrypt
 
 resources:
