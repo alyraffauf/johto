@@ -15,6 +15,8 @@ spec:
       labels:
         app.kubernetes.io/name: uptime-kuma
     spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       nodeSelector:
         johto.narwhal-snapper-ts.net/workload: media
       terminationGracePeriodSeconds: 10
