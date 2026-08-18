@@ -1,0 +1,47 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cute-haus
+  namespace: websites
+spec:
+  dnsNames:
+    - cute.haus
+    - www.cute.haus
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: cute-haus-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: watsup
+  namespace: websites
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: cute.haus
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: watsup
+                port:
+                  name: http
+    - host: www.cute.haus
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: watsup
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - cute.haus
+        - www.cute.haus
+      secretName: cute-haus-tls

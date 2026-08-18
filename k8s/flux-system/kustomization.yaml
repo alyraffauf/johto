@@ -18,3 +18,4 @@ resources:
   - tailscale-private-ingress.yaml
   - tailscale.yaml
   - uptime-kuma.yaml
+  - watsup.yaml

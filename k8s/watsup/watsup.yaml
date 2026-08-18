@@ -1,0 +1,140 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: websites
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: watsup-config
+  namespace: websites
+data:
+  watsup.toml: |
+    title = "watsup"
+
+    [[sections]]
+    type = "services"
+    title = "Johto"
+    columns = 4
+
+    [[sections.services]]
+    name = "Immich"
+    url = "https://immich.cute.haus"
+
+    [[sections.services]]
+    name = "Nextcloud"
+    url = "https://nextcloud.cute.haus"
+
+    [[sections.services]]
+    name = "Paperless"
+    url = "https://paperless.cute.haus"
+
+    [[sections.services]]
+    name = "Plex"
+    url = "https://plex.cute.haus"
+
+    [[sections.services]]
+    name = "Uptime Kuma"
+    url = "https://kuma.cute.haus"
+
+    [[sections.services]]
+    name = "Navidrome"
+    url = "https://navidrome.narwhal-snapper.ts.net"
+
+    [[sections.services]]
+    name = "Prowlarr"
+    url = "https://prowlarr.narwhal-snapper.ts.net"
+
+    [[sections.services]]
+    name = "Radarr"
+    url = "https://radarr.narwhal-snapper.ts.net"
+
+    [[sections.services]]
+    name = "Sonarr"
+    url = "https://sonarr.narwhal-snapper.ts.net"
+
+    [[sections.services]]
+    name = "Lidarr"
+    url = "https://lidarr.narwhal-snapper.ts.net"
+
+    [[sections.services]]
+    name = "Bazarr"
+    url = "https://bazarr.narwhal-snapper.ts.net"
+
+    [[sections.services]]
+    name = "Tautulli"
+    url = "https://tautulli.narwhal-snapper.ts.net"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: watsup
+  namespace: websites
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: watsup
+  template:
+    metadata:
+      labels:
+        app: watsup
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: watsup
+          image: ghcr.io/alyraffauf/watsup:latest@sha256:f28824be43af70f7a163dfa8056b77fadd0fa59f95cad1d713e8cad35c529b18
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: WATSUP_CONFIG_PATH
+              value: /run/configs/watsup.toml
+          ports:
+            - name: http
+              containerPort: 3000
+          resources:
+            requests:
+              cpu: 10m
+              memory: 96Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          volumeMounts:
+            - name: config
+              mountPath: /run/configs/watsup.toml
+              subPath: watsup.toml
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: watsup-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: watsup
+  namespace: websites
+spec:
+  selector:
+    app: watsup
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
