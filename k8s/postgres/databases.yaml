@@ -1,6 +1,17 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
+  name: paperless
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: paperless
+  owner: paperless
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
   name: bazarr
   namespace: cnpg-system
 spec:
