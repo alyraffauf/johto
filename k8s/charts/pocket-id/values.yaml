@@ -4,6 +4,13 @@ image: ghcr.io/pocket-id/pocket-id:v2@sha256:c9c1d7b70006968d673a1073df048a3fdec
 
 appUrl: https://id.cute.haus
 
+hosts:
+  - id.cute.haus
+
+certificate:
+  clusterIssuer: letsencrypt
+  secretName: pocket-id-tls
+
 resources:
   requests:
     cpu: 50m
