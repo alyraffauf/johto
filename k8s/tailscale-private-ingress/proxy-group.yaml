@@ -7,6 +7,10 @@ spec:
     pod:
       nodeSelector:
         johto.narwhal-snapper-ts.net/workload: ingress
+      tailscaleContainer:
+        env:
+          - name: TS_EXPERIMENTAL_SERVICE_AUTO_ADVERTISEMENT
+            value: "true"
       tolerations:
         - effect: NoSchedule
           key: johto.narwhal-snapper-ts.net/workload
