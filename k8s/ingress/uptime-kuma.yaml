@@ -6,8 +6,6 @@ metadata:
 spec:
   dnsNames:
     - kuma.cute.haus
-    - status.cute.haus
-    - status.aly.social
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt
@@ -31,29 +29,7 @@ spec:
                 name: uptime-kuma
                 port:
                   name: http
-    - host: status.cute.haus
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: uptime-kuma
-                port:
-                  name: http
-    - host: status.aly.social
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: uptime-kuma
-                port:
-                  name: http
   tls:
     - hosts:
         - kuma.cute.haus
-        - status.cute.haus
-        - status.aly.social
       secretName: uptime-kuma-tls
