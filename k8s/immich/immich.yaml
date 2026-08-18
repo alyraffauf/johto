@@ -1,0 +1,181 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich
+  namespace: immich
+spec:
+  selector:
+    app: immich
+  ports:
+    - name: http
+      port: 2283
+      targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: valkey
+  namespace: immich
+spec:
+  selector:
+    app: valkey
+  ports:
+    - port: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: machine-learning
+  namespace: immich
+spec:
+  selector:
+    app: machine-learning
+  ports:
+    - name: http
+      port: 3003
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: valkey
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: valkey
+  template:
+    metadata:
+      labels:
+        app: valkey
+    spec:
+      enableServiceLinks: false
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
+      containers:
+        - name: valkey
+          image: valkey/valkey:9-alpine@sha256:ee91f7a174ac4d6a6b0685b3a60e321f0a9dbbb691f9b0e285be2ba1d1be8328
+          args:
+            [
+              valkey-server,
+              --save,
+              "",
+              --maxmemory,
+              1gb,
+              --maxmemory-policy,
+              volatile-lru,
+            ]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: machine-learning
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: machine-learning
+  template:
+    metadata:
+      labels:
+        app: machine-learning
+    spec:
+      enableServiceLinks: false
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
+      containers:
+        - name: machine-learning
+          image: ghcr.io/immich-app/immich-machine-learning:v3.1.0-openvino@sha256:627dfaf9339037be132209784883f7be13c1deb6be799454797bf6f231331f5b
+          env:
+            - { name: MACHINE_LEARNING_CACHE_FOLDER, value: /cache }
+          ports:
+            - { name: http, containerPort: 3003 }
+          resources:
+            limits:
+              memory: 4Gi
+          volumeMounts:
+            - name: cache
+              mountPath: /cache
+            - name: dri
+              mountPath: /dev/dri
+      volumes:
+        - name: cache
+          hostPath:
+            path: /mnt/Data/immich/ml-cache
+            type: Directory
+        - name: dri
+          hostPath:
+            path: /dev/dri
+            type: Directory
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich
+  namespace: immich
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: immich
+  template:
+    metadata:
+      labels:
+        app: immich
+    spec:
+      enableServiceLinks: false
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
+      containers:
+        - name: immich
+          image: ghcr.io/immich-app/immich-server:v3.1.0@sha256:b434cb9287eea1471c9974845914d4dd328c9c2d652e446ed4930f99944f0ceb
+          env:
+            - { name: DB_DATABASE_NAME, value: immich }
+            - { name: DB_HOSTNAME, value: postgres }
+            - { name: DB_PORT, value: "5432" }
+            - { name: DB_USERNAME, value: immich }
+            - { name: IMMICH_CONFIG_FILE, value: /etc/immich/config.json }
+            - {
+                name: IMMICH_MACHINE_LEARNING_URL,
+                value: http://machine-learning:3003,
+              }
+            - { name: REDIS_DBINDEX, value: "4" }
+            - { name: REDIS_HOSTNAME, value: valkey }
+            - { name: TZ, value: America/New_York }
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-env
+                  key: DB_PASSWORD
+          ports:
+            - { name: http, containerPort: 2283 }
+          resources:
+            limits:
+              memory: 4Gi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /etc/immich
+              readOnly: true
+      volumes:
+        - name: data
+          hostPath:
+            path: /mnt/Data/immich
+            type: Directory
+        - name: config
+          secret:
+            secretName: immich-config
+            items:
+              - key: config.json
+                path: config.json
