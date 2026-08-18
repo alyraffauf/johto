@@ -105,7 +105,7 @@ spec:
             - name: config
               mountPath: /config
             - name: library
-              mountPath: /media
+              mountPath: /mnt/Media
             - name: data
               mountPath: /data
       volumes:
