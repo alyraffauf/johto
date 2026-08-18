@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: ombi
+  namespace: cnpg-system
+spec:
+  name: ombi
+  owner: ombi
+  cluster:
+    name: pg-shared

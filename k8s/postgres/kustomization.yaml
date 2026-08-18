@@ -5,4 +5,5 @@ resources:
   - pocket-id-database.yaml
   - vaultwarden-database.yaml
   - tranquil-database.yaml
+  - ombi-database.yaml
   - scheduled-backup.yaml

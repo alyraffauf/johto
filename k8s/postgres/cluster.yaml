@@ -38,3 +38,7 @@ spec:
         login: true
         passwordSecret:
           name: tranquil-pg-creds
+      - name: ombi
+        login: true
+        passwordSecret:
+          name: ombi-pg-creds
