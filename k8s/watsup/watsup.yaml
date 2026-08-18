@@ -13,6 +13,29 @@ data:
     title = "watsup"
 
     [[sections]]
+    type = "widgets"
+    columns = 4
+
+    [[sections.widgets]]
+    type = "weather"
+
+    [[sections.widgets]]
+    type = "search"
+    span = 3
+
+    [[sections]]
+    type = "widgets"
+    columns = 2
+
+    [[sections.widgets]]
+    type = "lobsters"
+    title = "Lobsters"
+
+    [[sections.widgets]]
+    type = "hacker-news"
+    title = "Hacker News"
+
+    [[sections]]
     type = "services"
     title = "Johto"
     columns = 4
