@@ -6,6 +6,7 @@ resources:
   - gotk-components.yaml
   - gotk-sync.yaml
   - ingress.yaml
+  - immich.yaml
   - letsencrypt.yaml
   - media.yaml
   - nextcloud.yaml
