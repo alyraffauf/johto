@@ -87,6 +87,7 @@ spec:
   template:
     metadata: {labels: {app: paperless}}
     spec:
+      enableServiceLinks: false
       nodeSelector: {johto.narwhal-snapper-ts.net/workload: media}
       securityContext: {fsGroup: 1000}
       containers:
