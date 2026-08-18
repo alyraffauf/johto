@@ -8,6 +8,7 @@ spec:
     - name: letsencrypt
     - name: media
     - name: paperless
+    - name: nextcloud
   interval: 10m
   path: ./k8s/ingress
   prune: true
