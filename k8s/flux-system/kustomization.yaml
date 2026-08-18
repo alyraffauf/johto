@@ -5,4 +5,5 @@ resources:
   - gotk-sync.yaml
   - cert-manager.yaml
   - letsencrypt.yaml
+  - traefik.yaml
   - aly-codes.yaml
