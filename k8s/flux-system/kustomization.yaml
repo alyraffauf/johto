@@ -7,3 +7,4 @@ resources:
   - letsencrypt.yaml
   - traefik.yaml
   - aly-codes.yaml
+  - switchyard.yaml
