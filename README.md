@@ -1,4 +1,4 @@
-# ❄️ hoenn
+# ❄️ sinnoh
 
 My personal Nix configuration for NixOS, nix-darwin, and system-manager.
 

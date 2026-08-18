@@ -1,2 +1,1 @@
-.github
-flake.lock
+k8s/charts/**/templates/**
