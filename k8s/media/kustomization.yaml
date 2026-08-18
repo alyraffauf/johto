@@ -4,6 +4,7 @@ resources:
   - namespace.yaml
   - storage.yaml
   - postgres.yaml
+  - plex.yaml
   - bazarr.yaml
   - lidarr.yaml
   - prowlarr.yaml

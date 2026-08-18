@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: plex
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: plex
+    spec:
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
+      securityContext:
+        supplementalGroups: [44]
+      containers:
+        - name: plex
+          image: plexinc/pms-docker:1.43.3.10861-07dfddaeb@sha256:5bc1d13f48da6366f46aaf2a3ce1a6292897eadc1f8efcbbd7321d30e94f2ed4
+          env:
+            - name: ADVERTISE_IP
+              value: https://plex.cute.haus:443
+            - name: PLEX_GID
+              value: "1000"
+            - name: PLEX_UID
+              value: "1000"
+            - name: TZ
+              value: America/New_York
+          ports:
+            - containerPort: 32400
+              name: http
+          resources:
+            limits:
+              memory: 4Gi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /mnt/Media
+              readOnly: true
+            - name: backblaze
+              mountPath: /mnt/Backblaze
+              readOnly: true
+            - name: dri
+              mountPath: /dev/dri
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/Data/plex
+            type: Directory
+        - name: media
+          hostPath:
+            path: /mnt/Media
+            type: Directory
+        - name: backblaze
+          hostPath:
+            path: /mnt/Backblaze
+            type: Directory
+        - name: dri
+          hostPath:
+            path: /dev/dri
+            type: Directory
