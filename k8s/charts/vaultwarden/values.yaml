@@ -17,5 +17,5 @@ resources:
 
 publicIngress:
   enabled: true
-  clusterIssuer: letsencrypt-production
+  clusterIssuer: letsencrypt
   secretName: vaultwarden-tls
