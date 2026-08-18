@@ -15,6 +15,10 @@ spec:
   instances: 1
   managed:
     roles:
+      - name: nextcloud
+        login: true
+        passwordSecret:
+          name: nextcloud-postgres
       - name: paperless
         login: true
         passwordSecret:
