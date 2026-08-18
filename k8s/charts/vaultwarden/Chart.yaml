@@ -1,5 +1,0 @@
-apiVersion: v2
-name: vaultwarden
-description: Vaultwarden password manager
-type: application
-version: 0.1.0

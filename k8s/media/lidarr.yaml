@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lidarr
+  namespace: flux-system
+spec:
+  suspend: true
+  chart:
+    spec:
+      chart: ./k8s/charts/servarr
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+      version: 0.1.0
+  interval: 30m
+  releaseName: lidarr
+  targetNamespace: media
+  values:
+    app:
+      name: lidarr
+      port: 8686
+      image: lscr.io/linuxserver/lidarr@sha256:2e4cdc7c8d5fa36915f446a29976ee01d3f9cc9722b8530a09121c76fbabef55
+    databaseSecretName: lidarr-postgres

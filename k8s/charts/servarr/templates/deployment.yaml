@@ -1,0 +1,46 @@
+{{- $name := required "app.name is required" .Values.app.name }}
+{{- $port := required "app.port is required" .Values.app.port }}
+{{- $image := required "app.image is required" .Values.app.image }}
+{{- $databaseSecretName := required "databaseSecretName is required" .Values.databaseSecretName }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ $name }}
+    spec:
+      containers:
+        - name: {{ $name }}
+          image: {{ $image | quote }}
+          envFrom:
+            - secretRef:
+                name: {{ $databaseSecretName }}
+          ports:
+            - containerPort: {{ $port }}
+              name: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: library
+              mountPath: /media
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ $name }}-config
+        - name: library
+          persistentVolumeClaim:
+            claimName: media-library
+        - name: data
+          persistentVolumeClaim:
+            claimName: media-data

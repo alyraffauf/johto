@@ -1,0 +1,13 @@
+{{- $name := required "app.name is required" .Values.app.name }}
+{{- $port := required "app.port is required" .Values.app.port }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+spec:
+  selector:
+    app.kubernetes.io/name: {{ $name }}
+  ports:
+    - name: http
+      port: {{ $port }}
+      targetPort: http

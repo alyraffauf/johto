@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prowlarr
+  namespace: flux-system
+spec:
+  suspend: true
+  chart:
+    spec:
+      chart: ./k8s/charts/servarr
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+      version: 0.1.0
+  interval: 30m
+  releaseName: prowlarr
+  targetNamespace: media
+  values:
+    app:
+      name: prowlarr
+      port: 9696
+      image: lscr.io/linuxserver/prowlarr@sha256:1295cff29d10b486c0d8324d1559a552140a5932bf8b3d87e398654414f63f92
+    databaseSecretName: prowlarr-postgres

@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: bazarr
+  namespace: flux-system
+spec:
+  suspend: true
+  chart:
+    spec:
+      chart: ./k8s/charts/servarr
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+      version: 0.1.0
+  interval: 30m
+  releaseName: bazarr
+  targetNamespace: media
+  values:
+    app:
+      name: bazarr
+      port: 6767
+      image: lscr.io/linuxserver/bazarr@sha256:45a0ba295f5ca41c2cf1853ecedc099fb6f23dabbc80b8c1a73cd85eb195b60c
+    databaseSecretName: bazarr-postgres

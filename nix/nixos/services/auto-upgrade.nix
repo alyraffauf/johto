@@ -5,7 +5,7 @@ _: {
       allowReboot = true;
       dates = "02:00";
       fixedRandomDelay = true;
-      flake = "github:alyraffauf/sinnoh#${config.networking.hostName}";
+      flake = "github:alyraffauf/johto#${config.networking.hostName}";
       flags = ["--accept-flake-config"];
       operation = "switch";
       persistent = true;

@@ -1,0 +1,12 @@
+app:
+  name: ""
+  port: 0
+  image: ""
+
+databaseSecretName: ""
+
+config:
+  storageClassName: local-path
+  size: 1Gi
+
+resources: {}

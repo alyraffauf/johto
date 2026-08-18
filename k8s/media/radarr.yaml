@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: radarr
+  namespace: flux-system
+spec:
+  suspend: true
+  chart:
+    spec:
+      chart: ./k8s/charts/servarr
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+      version: 0.1.0
+  interval: 30m
+  releaseName: radarr
+  targetNamespace: media
+  values:
+    app:
+      name: radarr
+      port: 7878
+      image: lscr.io/linuxserver/radarr@sha256:a45b5ab0f850f39edb4cc9c95bbd967b52ddc3d4574a4dfb45561177db6c88f4
+    databaseSecretName: radarr-postgres

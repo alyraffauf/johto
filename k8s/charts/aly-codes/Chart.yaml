@@ -1,6 +1,0 @@
-apiVersion: v2
-name: aly-codes
-description: aly.codes static site
-type: application
-version: 0.1.0
-appVersion: "latest"

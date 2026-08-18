@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sonarr
+  namespace: flux-system
+spec:
+  suspend: true
+  chart:
+    spec:
+      chart: ./k8s/charts/servarr
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+      version: 0.1.0
+  interval: 30m
+  releaseName: sonarr
+  targetNamespace: media
+  values:
+    app:
+      name: sonarr
+      port: 8989
+      image: lscr.io/linuxserver/sonarr@sha256:373159ba768e23a3a1c497d9f2b936addf8fd5b1fdce7dd6a14080ac928bfda0
+    databaseSecretName: sonarr-postgres

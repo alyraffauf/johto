@@ -13,12 +13,12 @@ _: {
     services.k3s = {
       enable = true;
       tokenFile = config.sops.secrets.k3s-token.path;
-      extraFlags = ["--flannel-iface=sinnoh"];
+      extraFlags = ["--flannel-iface=johto"];
     };
 
     systemd.services.k3s = {
-      after = ["wireguard-sinnoh.service"];
-      wants = ["wireguard-sinnoh.service"];
+      after = ["wireguard-johto.service"];
+      wants = ["wireguard-johto.service"];
     };
   };
 }

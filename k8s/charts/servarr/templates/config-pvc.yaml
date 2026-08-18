@@ -1,0 +1,12 @@
+{{- $name := required "app.name is required" .Values.app.name }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $name }}-config
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.config.size }}
+  storageClassName: {{ .Values.config.storageClassName }}

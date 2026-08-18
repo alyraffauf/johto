@@ -1,6 +1,6 @@
 _: {
   flake.nixosModules.alloy = {config, ...}: let
-    lokiUrl = "http://canalave.sinnoh:3030/loki/api/v1/push";
+    lokiUrl = "http://goldenrod.johto:3030/loki/api/v1/push";
   in {
     services.alloy.enable = true;
 

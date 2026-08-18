@@ -1,13 +1,13 @@
 {self, ...}: {
   blzrd.nodes = {
-    sunnyshore = {
-      output = self.nixosConfigurations.sunnyshore.config.system.build.toplevel;
+    olivine = {
+      output = self.nixosConfigurations.olivine.config.system.build.toplevel;
       type = "nixos";
       user = "root";
     };
 
-    canalave = {
-      output = self.nixosConfigurations.canalave.config.system.build.toplevel;
+    goldenrod = {
+      output = self.nixosConfigurations.goldenrod.config.system.build.toplevel;
       type = "nixos";
       user = "root";
     };
