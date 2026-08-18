@@ -16,4 +16,4 @@ spec:
   releaseName: navidrome
   targetNamespace: media
   values:
-    replicaCount: 0
+    replicaCount: 1
