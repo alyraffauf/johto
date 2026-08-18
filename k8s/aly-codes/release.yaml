@@ -13,6 +13,9 @@ spec:
       version: 0.1.0
   install:
     createNamespace: true
+    remediation:
+      retries: 3
   interval: 30m
   releaseName: aly-codes
   targetNamespace: aly-codes
+  timeout: 10m
