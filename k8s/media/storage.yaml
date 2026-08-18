@@ -10,7 +10,7 @@ spec:
   mountOptions:
     - nfsvers=4.2
   nfs:
-    path: /mnt/Media
+    path: /Media
     server: 10.254.2.3
   persistentVolumeReclaimPolicy: Retain
   storageClassName: media-nfs
@@ -41,7 +41,7 @@ spec:
   mountOptions:
     - nfsvers=4.2
   nfs:
-    path: /mnt/Data
+    path: /
     server: 10.254.2.3
   persistentVolumeReclaimPolicy: Retain
   storageClassName: media-nfs
