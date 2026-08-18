@@ -9,6 +9,7 @@ resources:
   - secrets.yaml
   - postgres-backups.yaml
   - postgres.yaml
+  - tailscale-dns.yaml
   - vaultwarden.yaml
   - pocket-id.yaml
   - tranquil-pds.yaml
