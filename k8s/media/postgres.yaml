@@ -21,7 +21,7 @@ spec:
         - CREATE DATABASE radarr_log OWNER media
         - CREATE DATABASE sonarr_main OWNER media
         - CREATE DATABASE sonarr_log OWNER media
-  imageName: ghcr.io/cloudnative-pg/postgresql@sha256:f785551be35036d65a0f1ebe71995022d261a829391fc2f14222ca19795d7c20
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.6-bookworm
   instances: 1
   storage:
     size: 20Gi
