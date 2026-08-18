@@ -16,6 +16,6 @@ resources:
     memory: 256Mi
 
 publicIngress:
-  enabled: false
+  enabled: true
   clusterIssuer: letsencrypt-production
   secretName: vaultwarden-tls
