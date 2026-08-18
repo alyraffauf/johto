@@ -1,0 +1,35 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-cute-haus
+  namespace: media
+spec:
+  dnsNames:
+    - plex.cute.haus
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: plex-cute-haus-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plex
+  namespace: media
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: plex.cute.haus
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: plex
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - plex.cute.haus
+      secretName: plex-cute-haus-tls

@@ -12,6 +12,8 @@ spec:
       labels:
         app.kubernetes.io/name: plex
     spec:
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
       nodeSelector:
         johto.narwhal-snapper-ts.net/workload: media
       securityContext:
