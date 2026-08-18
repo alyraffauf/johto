@@ -7,10 +7,11 @@ spec:
   chart:
     spec:
       chart: ./k8s/charts/pocket-id
+      reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
         name: flux-system
-      version: 0.1.0
+      version: 0.1.1
   install:
     createNamespace: true
     remediation:
