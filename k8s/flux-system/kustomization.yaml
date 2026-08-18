@@ -4,6 +4,7 @@ resources:
   - gotk-components.yaml
   - gotk-sync.yaml
   - cert-manager.yaml
+  - cnpg.yaml
   - letsencrypt.yaml
   - traefik.yaml
   - aly-codes.yaml
