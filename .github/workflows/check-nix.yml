@@ -5,19 +5,19 @@ jobs:
   check-flake:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        fetch-depth: 1
-    - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
-    - name: Check flake evaluation
-      run: nix -Lv flake check
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - name: Check flake evaluation
+        run: nix -Lv flake check
 name: check-nix
-'on':
+"on":
   pull_request:
   push:
     branches:
-    - master
+      - master
     paths-ignore:
-    - '**/*.md'
-    - _img/**
+      - "**/*.md"
+      - _img/**
   workflow_dispatch: {}

@@ -10,7 +10,10 @@ _: {
         statix.enable = true;
       };
 
-      settings.excludes = ["secrets/**"];
+      settings.excludes = [
+        "secrets/**"
+        "k8s/flux-system/gotk-components.yaml"
+      ];
     };
   };
 }

@@ -31,12 +31,12 @@ jobs:
           nix build --accept-flake-config --print-out-paths
           .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel
 name: build-nixos
-'on':
+"on":
   pull_request:
   push:
     branches:
       - master
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
       - _img/**
   workflow_dispatch: {}
