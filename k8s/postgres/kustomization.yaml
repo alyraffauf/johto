@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - cluster.yaml
   - pocket-id-database.yaml
+  - vaultwarden-database.yaml
   - scheduled-backup.yaml

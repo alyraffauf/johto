@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden
+  labels:
+    app: vaultwarden
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: vaultwarden
+  template:
+    metadata:
+      labels:
+        app: vaultwarden
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+        - name: vaultwarden
+          image: {{ .Values.image | quote }}
+          env:
+            - name: DOMAIN
+              value: {{ .Values.domain | quote }}
+            - name: ROCKET_ADDRESS
+              value: 0.0.0.0
+            - name: ROCKET_PORT
+              value: "8222"
+            - name: ROCKET_LOG
+              value: critical
+            - name: SIGNUPS_ALLOWED
+              value: "false"
+          envFrom:
+            - secretRef:
+                name: vaultwarden-env
+          ports:
+            - name: http
+              containerPort: 8222
+          resources: {{ .Values.resources | toYaml | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          startupProbe:
+            httpGet:
+              path: /alive
+              port: http
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /alive
+              port: http
+            periodSeconds: 60
+            timeoutSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /alive
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 2
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: vaultwarden-data

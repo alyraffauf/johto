@@ -30,3 +30,7 @@ spec:
         login: true
         passwordSecret:
           name: pocket-id-pg-creds
+      - name: vaultwarden
+        login: true
+        passwordSecret:
+          name: vaultwarden-pg-creds
