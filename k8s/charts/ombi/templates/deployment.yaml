@@ -22,6 +22,19 @@ spec:
         fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
+      initContainers:
+        - name: database-configuration
+          image: {{ .Values.image | quote }}
+          command:
+            - sh
+            - -c
+            - cp /credentials/database.json /config/database.json
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: database-configuration
+              mountPath: /credentials
+              readOnly: true
       containers:
         - name: ombi
           image: {{ .Values.image | quote }}
@@ -39,10 +52,6 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: database-configuration
-              mountPath: /config/database.json
-              subPath: database.json
-              readOnly: true
           startupProbe:
             httpGet:
               path: /
