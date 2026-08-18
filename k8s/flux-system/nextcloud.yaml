@@ -15,4 +15,6 @@ spec:
     kind: GitRepository
     name: flux-system
   timeout: 10m
-  wait: true
+  # The Collabora configuration Job is retried independently; it must not
+  # block deployment reconciliation when a transient dependency is starting.
+  wait: false
