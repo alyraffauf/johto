@@ -7,7 +7,6 @@ spec:
   dependsOn:
     - name: postgres
     - name: secrets
-  suspend: true
   interval: 10m
   path: ./k8s/ombi
   prune: true
