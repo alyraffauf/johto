@@ -5,7 +5,9 @@ resources:
   - gotk-sync.yaml
   - cert-manager.yaml
   - cnpg.yaml
+  - barman-cloud.yaml
   - secrets.yaml
+  - postgres-backups.yaml
   - postgres.yaml
   - pocket-id.yaml
   - letsencrypt.yaml

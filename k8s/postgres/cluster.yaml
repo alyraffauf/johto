@@ -19,6 +19,11 @@ spec:
   affinity:
     nodeSelector:
       kubernetes.io/hostname: sunnyshore
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: pg-shared-backups
   managed:
     roles:
       - name: pocket-id
