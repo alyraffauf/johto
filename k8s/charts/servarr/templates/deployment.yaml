@@ -112,11 +112,13 @@ spec:
           image: {{ $image | quote }}
           env:
             - name: PGID
-              value: "911"
+              value: "100"
             - name: PUID
               value: "911"
             - name: TZ
               value: America/New_York
+            - name: UMASK
+              value: "002"
             {{- if .Values.database.environment }}
             - name: POSTGRES_ENABLED
               value: "true"

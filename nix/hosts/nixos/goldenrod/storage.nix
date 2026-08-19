@@ -33,6 +33,11 @@ _: {
       "d /mnt/Data/cache/tautulli 0755 1000 100 - -"
       "d /mnt/Data/user 0755 root root - -"
       "d /mnt/Data/legacy 0755 root root - -"
+      "z /mnt/Media/Downloads 2775 - 100 - -"
+      "z /mnt/Media/Anime 2775 - 100 - -"
+      "z /mnt/Media/Shows 2775 - 100 - -"
+      "z /mnt/Media/Movies 2775 - 100 - -"
+      "z /mnt/Media/Music 2775 - 100 - -"
     ];
   };
 }
