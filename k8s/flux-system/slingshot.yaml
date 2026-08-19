@@ -4,8 +4,6 @@ metadata:
   name: slingshot
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: ingress
   interval: 10m
   path: ./k8s/slingshot
   prune: true
