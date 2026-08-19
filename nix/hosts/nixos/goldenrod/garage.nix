@@ -5,7 +5,7 @@ _: {
     self,
     ...
   }: let
-    dataDirectory = "/mnt/Data";
+    dataDirectory = "/mnt/Data/apps/garage";
   in {
     sops.secrets = {
       garage-nextcloud-access-key = {

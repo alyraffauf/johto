@@ -15,7 +15,7 @@ _: {
     };
 
     myNixOs.profile.b2media = {
-      cacheDir = "/mnt/Data/.rclone-cache";
+      cacheDir = "/mnt/Data/cache/rclone";
       audioCacheSize = "50G";
       audioReadAhead = "3G";
       videoCacheSize = "300G";
@@ -26,6 +26,7 @@ _: {
       "d /mnt/Data/apps 0755 root root - -"
       "d /mnt/Data/cache 0755 root root - -"
       "d /mnt/Data/user 0755 root root - -"
+      "d /mnt/Data/legacy 0755 root root - -"
     ];
   };
 }

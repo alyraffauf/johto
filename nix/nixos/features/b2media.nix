@@ -57,7 +57,7 @@ _: {
     options.myNixOs.profile.b2media = {
       cacheDir = lib.mkOption {
         description = "Directory for rclone VFS cache.";
-        example = "/mnt/Data/.rclone-cache";
+        example = "/mnt/Data/cache/rclone";
         type = lib.types.str;
       };
 
