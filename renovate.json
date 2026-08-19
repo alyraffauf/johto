@@ -28,6 +28,18 @@
     "automerge": true
   },
 
+  "customManagers": [
+    {
+      "description": "Pinned images in local Helm chart templates",
+      "customType": "regex",
+      "managerFilePatterns": ["/^k8s/charts/.+/templates/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "\\s*image:\\s+[\"']?(?<depName>[^\\s\"'{}]+?):(?<currentValue>[^\\s\"'@{}]+)@(?<currentDigest>sha256:[a-f0-9]{64})[\"']?"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
+
   "packageRules": [
     {
       "description": "Auto-merge routine updates after CI passes",
