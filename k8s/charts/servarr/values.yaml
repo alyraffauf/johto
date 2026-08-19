@@ -17,4 +17,9 @@ config:
   storageClassName: local-path
   size: 1Gi
 
+exporter:
+  enabled: false
+  port: 0
+  image: ""
+
 resources: {}

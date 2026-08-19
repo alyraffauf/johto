@@ -5,6 +5,7 @@
 {{- $mainDatabase := required "database.mainDatabase is required" .Values.database.mainDatabase }}
 {{- $legacyConfigPath := required "legacyConfig.path is required" .Values.legacyConfig.path }}
 {{- $legacyConfigFormat := required "legacyConfig.format is required" .Values.legacyConfig.format }}
+{{- $exporterEnabled := .Values.exporter.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -86,6 +87,26 @@ spec:
             - name: legacy-config
               mountPath: /legacy
               readOnly: true
+      {{- if $exporterEnabled }}
+        - name: prepare-exporter-api-key
+          image: docker.io/library/busybox@sha256:9db7b59979c38555a39def84a31fb98b5296952f9e3afd4f6f11f05b07adfab0
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              {{- if eq $legacyConfigFormat "xml" }}
+              api_key="$(sed -n 's:.*<ApiKey>\([^<]*\)</ApiKey>.*:\1:p' /config-read/config.xml)"
+              {{- else if eq $legacyConfigFormat "yaml" }}
+              api_key="$(sed -n 's/^[[:space:]]*apikey:[[:space:]]*//p' /config-read/config/config.yaml | head -n 1 | tr -d '\"')"
+              {{- end }}
+              test -n "$api_key"
+              printf %s "$api_key" > /run/exportarr/api-key
+          volumeMounts:
+            - name: config
+              mountPath: /config-read
+              readOnly: true
+            - name: exporter-api-key
+              mountPath: /run/exportarr
+      {{- end }}
       containers:
         - name: {{ $name }}
           image: {{ $image | quote }}
@@ -136,6 +157,39 @@ spec:
               mountPath: /data
             - name: backblaze
               mountPath: /mnt/Backblaze
+        {{- if $exporterEnabled }}
+        - name: exporter
+          image: {{ required "exporter.image is required when exporter.enabled" .Values.exporter.image | quote }}
+          args: [{{ $name | quote }}]
+          env:
+            - name: API_KEY_FILE
+              value: /run/exportarr/api-key
+            - name: PORT
+              value: {{ .Values.exporter.port | quote }}
+            - name: URL
+              value: "http://127.0.0.1:{{ $port }}"
+          ports:
+            - containerPort: {{ .Values.exporter.port }}
+              name: metrics
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: exporter-api-key
+              mountPath: /run/exportarr
+              readOnly: true
+        {{- end }}
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -156,3 +210,7 @@ spec:
           hostPath:
             path: {{ $legacyConfigPath }}
             type: Directory
+        {{- if $exporterEnabled }}
+        - name: exporter-api-key
+          emptyDir: {}
+        {{- end }}

@@ -11,3 +11,8 @@ spec:
     - name: http
       port: {{ $port }}
       targetPort: http
+    {{- if .Values.exporter.enabled }}
+    - name: metrics
+      port: {{ .Values.exporter.port }}
+      targetPort: metrics
+    {{- end }}

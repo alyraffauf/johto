@@ -27,3 +27,7 @@ spec:
     legacyConfig:
       format: yaml
       path: /mnt/Data/bazarr
+    exporter:
+      enabled: true
+      port: 9708
+      image: ghcr.io/onedr0p/exportarr:v2.3.0@sha256:af535d94061cf97a52e1661945ffba78c03f9443eae7c0da1a80a5a4be56b520
