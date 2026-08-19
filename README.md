@@ -115,7 +115,9 @@ cloud-init data when it finishes. It never removes a disk after failure; inspect
 the domain and disk before choosing recovery. Goldenrod enables NixOS's
 monolithic `libvirtd` service, starts and autostarts libvirt's `default`
 network, and provides virt-install's cloud-init scratch directory. The
-cloud-init template joins Tailscale with Tailscale SSH enabled.
+cloud-init template disables root and password SSH, grants Aly passwordless
+sudo through `/etc/sudoers.d/90-aly`, and joins Tailscale with Tailscale SSH
+enabled.
 
 ## Secrets and DNS
 

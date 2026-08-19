@@ -22,6 +22,17 @@ resource "cloudflare_dns_record" "cute_haus_vaultwarden" {
   settings = {}
 }
 
+resource "cloudflare_dns_record" "cute_haus_pds" {
+  zone_id  = local.cute_haus_zone
+  name     = "pds.cute.haus"
+  type     = "A"
+  content  = local.sinnoh_sunnyshore
+  proxied  = false
+  ttl      = 1
+  tags     = []
+  settings = {}
+}
+
 moved {
   from = cloudflare_dns_record.cute_haus_sinnoh_ingress["vault.cute.haus"]
   to   = cloudflare_dns_record.cute_haus_vaultwarden

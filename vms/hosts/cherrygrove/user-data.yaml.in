@@ -1,12 +1,13 @@
 #cloud-config
 hostname: cherrygrove
 manage_etc_hosts: true
+disable_root: true
+ssh_pwauth: false
 
 users:
   - name: aly
     groups: [wheel]
     shell: /bin/bash
-    sudo: ALL=(ALL) NOPASSWD:ALL
     ssh_authorized_keys:
 @ALY_SSH_KEYS@
 
@@ -14,6 +15,11 @@ packages:
   - tailscale
 
 write_files:
+  - path: /etc/sudoers.d/90-aly
+    owner: root:root
+    permissions: "0440"
+    content: |
+      aly ALL=(ALL) NOPASSWD: ALL
   - path: /run/tailscale-auth-key
     permissions: "0600"
     content: @TAILSCALE_AUTH_KEY@
