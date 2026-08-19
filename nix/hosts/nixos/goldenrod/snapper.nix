@@ -24,14 +24,11 @@ _: {
         -.bashrc
         -.cache
         -.config
-        -.librewolf
         -.local
-        -.mozilla
         -.nix-profile
         -.pki
         -.share
         -.snapshots
-        -.thunderbird
         -.zshrc
       '';
 
