@@ -8,3 +8,4 @@ resources:
   - uptime-kuma.yaml
   - watsup.yaml
   - ombi.yaml
+  - pocket-id.yaml

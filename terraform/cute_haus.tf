@@ -10,6 +10,7 @@ locals {
   cute_haus_johto_ingress = {
     "collabora.cute.haus" = false
     "cute.haus"           = true
+    "id.cute.haus"        = true
     "immich.cute.haus"    = false
     "kuma.cute.haus"      = true
     "nextcloud.cute.haus" = false
@@ -22,7 +23,6 @@ locals {
 # dependency.
 resource "cloudflare_dns_record" "cute_haus_sinnoh_ingress" {
   for_each = {
-    "id.cute.haus"    = true
     "pds.cute.haus"   = false
     "vault.cute.haus" = true
   }
@@ -35,6 +35,11 @@ resource "cloudflare_dns_record" "cute_haus_sinnoh_ingress" {
   ttl      = 1
   tags     = []
   settings = {}
+}
+
+moved {
+  from = cloudflare_dns_record.cute_haus_sinnoh_ingress["id.cute.haus"]
+  to   = cloudflare_dns_record.cute_haus_johto_ingress["id.cute.haus"]
 }
 
 resource "cloudflare_dns_record" "cute_haus_legacy_ingress" {

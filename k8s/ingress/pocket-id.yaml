@@ -1,0 +1,35 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pocket-id-cute-haus
+  namespace: identity
+spec:
+  dnsNames:
+    - id.cute.haus
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: pocket-id-cute-haus-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pocket-id
+  namespace: identity
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: id.cute.haus
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pocket-id
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - id.cute.haus
+      secretName: pocket-id-cute-haus-tls
