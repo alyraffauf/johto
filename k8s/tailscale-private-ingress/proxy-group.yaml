@@ -9,11 +9,18 @@ spec:
         - port: 31667
           endPort: 31680
       selector:
-        kubernetes.io/hostname: olivine
+        johto.narwhal-snapper-ts.net/private-ingress: "true"
   statefulSet:
     pod:
       nodeSelector:
-        johto.narwhal-snapper-ts.net/workload: ingress
+        johto.narwhal-snapper-ts.net/private-ingress: "true"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  tailscale.com/parent-resource: private-ingress
+              topologyKey: kubernetes.io/hostname
       tailscaleContainer:
         env:
           - name: TS_EXPERIMENTAL_SERVICE_AUTO_ADVERTISEMENT
@@ -30,5 +37,5 @@ metadata:
   name: private-ingress
 spec:
   proxyClass: private-ingress
-  replicas: 1
+  replicas: 2
   type: ingress
