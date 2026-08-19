@@ -24,7 +24,9 @@ _: {
 
     systemd.tmpfiles.rules = [
       "d /mnt/Data/apps 0755 root root - -"
+      "d /mnt/Data/apps/jellyfin 0755 root root - -"
       "d /mnt/Data/cache 0755 root root - -"
+      "d /mnt/Data/cache/jellyfin 0755 root root - -"
       "d /mnt/Data/cache/plex 0755 1000 1000 - -"
       "d /mnt/Data/cache/plex-plugin-support 0755 1000 1000 - -"
       "d /mnt/Data/cache/tautulli 0755 1000 100 - -"
