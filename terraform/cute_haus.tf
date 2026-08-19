@@ -16,7 +16,6 @@ locals {
 # dependency.
 resource "cloudflare_dns_record" "cute_haus_sinnoh_ingress" {
   for_each = {
-    "pds.cute.haus"   = false
     "vault.cute.haus" = true
   }
 
