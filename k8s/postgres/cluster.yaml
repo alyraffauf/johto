@@ -11,10 +11,16 @@ spec:
     initdb:
       database: media
       owner: media
+      secret:
+        name: pg-shared-app
   imageName: ghcr.io/cloudnative-pg/postgresql:18.6@sha256:d7a81cb5da3182d95d0da5fabfb9e484e375db899dcd54b684105f1e8966e9ca
   instances: 1
   managed:
     roles:
+      - name: media
+        login: true
+        passwordSecret:
+          name: pg-shared-app
       - name: nextcloud
         login: true
         passwordSecret:
