@@ -8,6 +8,7 @@ resources:
   - gotk-sync.yaml
   - ingress.yaml
   - immich.yaml
+  - jellyfin.yaml
   - letsencrypt.yaml
   - arr.yaml
   - nextcloud.yaml
