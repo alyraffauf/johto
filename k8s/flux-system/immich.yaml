@@ -4,7 +4,7 @@ metadata:
   name: immich
   namespace: flux-system
 spec:
-  suspend: true
+  suspend: false
   dependsOn:
     - name: secrets
   interval: 10m
