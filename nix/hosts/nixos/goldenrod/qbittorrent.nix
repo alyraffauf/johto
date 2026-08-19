@@ -1,26 +1,12 @@
 _: {
-  flake.nixosModules.goldenrod = {
-    config,
-    pkgs,
-    ...
-  }: {
-    services.qbittorrent = {
-      enable = true;
-      profileDir = "/var/lib/qbittorrent";
-    };
-
-    services.restic.backups.qbittorrent = let
-      stop = service: "${pkgs.systemd}/bin/systemctl stop ${service}";
-      start = service: "${pkgs.systemd}/bin/systemctl start ${service}";
-    in {
+  flake.nixosModules.goldenrod = {config, ...}: {
+    services.restic.backups.qbittorrent = {
       extraBackupArgs = [
         "--cleanup-cache"
         "--compression max"
         "--no-scan"
       ];
-      backupCleanupCommand = start "qbittorrent";
-      backupPrepareCommand = stop "qbittorrent";
-      paths = [config.services.qbittorrent.profileDir];
+      paths = ["/mnt/Data/apps/qbittorrent"];
       repository = "rclone:b2:aly-backups/johto/${config.networking.hostName}/qbittorrent";
       initialize = true;
       inhibitsSleep = true;

@@ -24,6 +24,7 @@ _: {
 
     systemd.tmpfiles.rules = [
       "d /mnt/Data/apps 0755 root root - -"
+      "d /mnt/Data/apps/qbittorrent 0750 888 888 - -"
       "d /mnt/Data/apps/jellyfin 0755 root root - -"
       "d /mnt/Data/cache 0755 root root - -"
       "d /mnt/Data/cache/jellyfin 0755 root root - -"
