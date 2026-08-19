@@ -9,6 +9,7 @@ _: {
       extraFlags = [
         "--node-ip=10.254.2.2"
         "--advertise-address=10.254.2.2"
+        "--tls-san=olivine"
       ];
     };
 
