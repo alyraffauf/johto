@@ -42,10 +42,16 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
+            - name: cache
+              mountPath: /config/cache
       volumes:
         - name: config
           hostPath:
             path: /mnt/Data/apps/tautulli
+            type: Directory
+        - name: cache
+          hostPath:
+            path: /mnt/Data/cache/tautulli
             type: Directory
 ---
 apiVersion: v1

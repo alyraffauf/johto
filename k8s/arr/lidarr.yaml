@@ -25,7 +25,7 @@ spec:
       logDatabase: lidarr_log
       mainDatabase: lidarr_main
     legacyConfig:
-      path: /mnt/Data/apps/lidarr/.config/Lidarr
+      path: /mnt/Data/legacy/servarr-seeds/lidarr
     exporter:
       enabled: true
       port: 9709

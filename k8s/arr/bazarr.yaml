@@ -26,7 +26,7 @@ spec:
       mainDatabase: bazarr
     legacyConfig:
       format: yaml
-      path: /mnt/Data/apps/bazarr
+      path: /mnt/Data/legacy/servarr-seeds/bazarr
     exporter:
       enabled: true
       port: 9708

@@ -25,7 +25,7 @@ spec:
       logDatabase: sonarr_log
       mainDatabase: sonarr_main
     legacyConfig:
-      path: /mnt/Data/apps/sonarr/.config/NzbDrone
+      path: /mnt/Data/legacy/servarr-seeds/sonarr
     exporter:
       enabled: true
       port: 9712
