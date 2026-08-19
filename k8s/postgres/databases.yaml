@@ -34,6 +34,17 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
+  name: pocket-id
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: pocket-id
+  owner: pocket-id
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
   name: bazarr
   namespace: cnpg-system
 spec:
