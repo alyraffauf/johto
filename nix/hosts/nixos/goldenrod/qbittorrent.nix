@@ -1,5 +1,10 @@
 _: {
   flake.nixosModules.goldenrod = {config, ...}: {
+    networking.firewall = {
+      allowedTCPPorts = [6881];
+      allowedUDPPorts = [6881];
+    };
+
     services.restic.backups.qbittorrent = {
       extraBackupArgs = [
         "--cleanup-cache"
