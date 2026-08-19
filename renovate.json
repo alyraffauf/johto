@@ -9,7 +9,7 @@
   "timezone": "America/New_York",
   "schedule": ["* 22-23,0-5 * * *"],
   "labels": ["dependencies"],
-  "platformAutomerge": false,
+  "platformAutomerge": true,
 
   "nix": {
     "enabled": true
@@ -41,6 +41,11 @@
   ],
 
   "packageRules": [
+    {
+      "description": "OCI Helm charts use chart versions, not container digests",
+      "matchManagers": ["flux"],
+      "pinDigests": false
+    },
     {
       "description": "Auto-merge routine updates after CI passes",
       "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
