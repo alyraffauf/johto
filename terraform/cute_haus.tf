@@ -1,12 +1,4 @@
 locals {
-  cute_haus_legacy_ingress = {
-    "auth-navidrome.cute.haus" = true
-    "navidrome.cute.haus"      = true
-    "photoprism.cute.haus"     = false
-    "seerr.cute.haus"          = true
-    "slingshot.cute.haus"      = true
-  }
-
   cute_haus_johto_ingress = {
     "collabora.cute.haus" = false
     "cute.haus"           = true
@@ -15,6 +7,7 @@ locals {
     "kuma.cute.haus"      = true
     "nextcloud.cute.haus" = false
     "paperless.cute.haus" = false
+    "slingshot.cute.haus" = true
   }
 }
 
@@ -42,16 +35,9 @@ moved {
   to   = cloudflare_dns_record.cute_haus_johto_ingress["id.cute.haus"]
 }
 
-resource "cloudflare_dns_record" "cute_haus_legacy_ingress" {
-  for_each = local.cute_haus_legacy_ingress
-  zone_id  = local.cute_haus_zone
-  name     = each.key
-  type     = "A"
-  content  = local.legacy_pastoria
-  proxied  = each.value
-  ttl      = 1
-  tags     = []
-  settings = {}
+moved {
+  from = cloudflare_dns_record.cute_haus_legacy_ingress["slingshot.cute.haus"]
+  to   = cloudflare_dns_record.cute_haus_johto_ingress["slingshot.cute.haus"]
 }
 
 resource "cloudflare_dns_record" "cute_haus_johto_ingress" {
