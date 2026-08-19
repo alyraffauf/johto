@@ -11,13 +11,14 @@ _: {
         pkgs.bun
         pkgs.just
         pkgs.nh
+        pkgs.opentofu
         pkgs.sops
         pkgs.ssh-to-age
       ];
 
       shellHook = ''
         export FLAKE="." NH_FLAKE="."
-        echo "👋 Welcome to the sinnoh devShell!"
+        echo "👋 Welcome to the johto devShell!"
       '';
     };
   };

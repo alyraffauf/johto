@@ -1,71 +1,103 @@
-# ❄️ sinnoh
+# 🏠 johto
 
-My personal Nix configuration for NixOS, nix-darwin, and system-manager.
+Declarative infrastructure for my personal homelab. Johto combines NixOS,
+k3s, Flux, SOPS, and OpenTofu to manage the hosts, applications, networking,
+DNS, and backups that keep the lab running.
 
-The flake is organized as small, composable modules. Shared behavior lives
-under `modules/nixos`, `modules/darwin`, and `modules/system-manager`; each
-host pulls together the pieces it needs under `modules/hosts`.
+If you're looking for my production services, see [sinnoh](https://github.com/alyraffauf/sinnoh).
+For my personal nix flake, check out [hoenn](https://github.com/alyraffauf/hoenn).
 
-## Configurations
+## Architecture
 
-| Platform       | Host       | Flake output                     |
-| -------------- | ---------- | -------------------------------- |
-| NixOS          | Fallarbor  | `nixosConfigurations.fallarbor`  |
-| NixOS          | Mauville   | `nixosConfigurations.mauville`   |
-| NixOS          | Rustboro   | `nixosConfigurations.rustboro`   |
-| NixOS          | Sootopolis | `nixosConfigurations.sootopolis` |
-| nix-darwin     | Fortree    | `darwinConfigurations.fortree`   |
-| system-manager | Sootopolis | `systemConfigs.sootopolis`       |
+| Host        | Role                                                                                                    |
+| ----------- | ------------------------------------------------------------------------------------------------------- |
+| `olivine`   | k3s server and control plane, public ingress workloads, private DNS, and etcd backups                   |
+| `goldenrod` | k3s worker for media workloads, persistent storage, NFS, Garage, observability, and application backups |
 
-Hardware discovery is captured with nixos-facter, disk layouts are declared
-with Disko, and SOPS manages encrypted secrets.
+The nodes communicate over a dedicated WireGuard network. Tailscale provides
+private service access, while public services enter through Olivine. Flux
+reconciles Kubernetes resources from the `master` branch.
 
-## Repository layout
+The cluster runs a mix of personal cloud, media, and operations services,
+including Immich, Nextcloud, Paperless, Pocket ID, Plex, Jellyfin, the Servarr
+stack, CloudNativePG, Prometheus, Loki, and Uptime Kuma.
+
+## Repository Layout
 
 ```text
-modules/
-├── nixos/           Shared NixOS modules, features, services, and users
-├── darwin/          Shared nix-darwin modules
-├── system-manager/  Shared system-manager modules
-└── hosts/           Per-host composition and hardware state
+nix/
+├── hosts/nixos/       Per-host NixOS configuration and hardware state
+└── nixos/             Shared modules, features, services, and users
+k8s/                  Flux, Kustomize, Helm, and application manifests
+secrets/              SOPS-encrypted host and Kubernetes secrets
+keys/                 Public SSH keys used to derive age recipients
+terraform/            OpenTofu configuration for Cloudflare DNS
+scripts/              Repository maintenance utilities
 ```
 
-`flake.nix` imports the `modules/` tree. Each Nix file there is a flake-parts
-module that declares or extends a flake output; standalone helpers live outside
-that tree.
+`flake.nix` assembles the Nix modules and exposes the `olivine` and
+`goldenrod` NixOS configurations. Kubernetes applications are grouped by
+service under `k8s/`; `k8s/flux-system/` defines their reconciliation order.
 
-## Common commands
+## Development
 
-Run these commands from the repository root.
+Enter the pinned toolchain with `nix develop`, or run `direnv allow` to load it
+automatically. Useful commands from the repository root include:
 
 ```bash
-# Format and evaluate the complete flake.
+# Format Nix, YAML, Markdown, TypeScript, and shell files.
 nix fmt
+
+# Evaluate the flake and run its configured checks.
 nix flake check
 
-# Build an output before applying it.
-nix build .#nixosConfigurations.mauville.config.system.build.toplevel
-nix build .#darwinConfigurations.fortree.config.system.build.toplevel
-nix build .#systemConfigs.sootopolis
+# Build a host configuration without activating it.
+nix build .#nixosConfigurations.olivine.config.system.build.toplevel
+nix build .#nixosConfigurations.goldenrod.config.system.build.toplevel
 
-# Apply a configuration on its target host.
-sudo nixos-rebuild switch --flake .#mauville
-darwin-rebuild switch --flake .#fortree
+# Discover repository maintenance recipes.
+just
 ```
 
-The Sootopolis system-manager configuration is built as shown above and is
-also refreshed by its configured system-manager auto-upgrade service.
+CI evaluates the flake, builds the development shell, and builds both NixOS
+hosts. Kubernetes changes are deployed through Flux after they reach
+`master`; avoid applying repository manifests manually unless recovering the
+cluster.
 
-## Secrets
+## NixOS Deployments
 
-Secrets in `secrets/` are SOPS-encrypted for every public key in `keys/`.
-NixOS and nix-darwin decrypt host secrets with
-`/etc/ssh/ssh_host_ed25519_key` during activation. Edit a secret with SOPS,
-then build and apply the affected configuration:
+`nix/deployments.nix` registers both hosts with `blzrd`. From the development
+shell, deploy only the intended host whenever possible:
 
 ```bash
-sops secrets/tailscale.yaml
+blzrd switch olivine       # Activate Olivine and set its boot default
+blzrd switch goldenrod     # Activate Goldenrod and set its boot default
+blzrd boot olivine         # Set Olivine's next boot without activating it
+blzrd switch               # Deploy both registered hosts
 ```
 
-When adding or removing a recipient, update `.sops.yaml` and re-encrypt every
-secret before committing the change.
+Run the checks and build the affected host first. Supplying no node names
+targets every registered node, so reserve the bare command for coordinated
+fleet deployments.
+
+## Secrets and DNS
+
+Secrets are encrypted with SOPS for the recipients declared in `.sops.yaml`.
+Never commit decrypted values or OpenTofu state.
+
+```bash
+just sops-bootstrap             # Install this machine's age key once
+just sops-edit tailscale.yaml   # Edit an encrypted secret
+just sops-rekey                 # Update recipients after keys/ changes
+```
+
+Direnv decrypts the Cloudflare and Backblaze credentials used by OpenTofu.
+Review DNS changes before applying them:
+
+```bash
+tofu -chdir=terraform init
+tofu -chdir=terraform plan
+tofu -chdir=terraform apply
+```
+
+See [AGENTS.md](AGENTS.md) for contribution and validation guidelines.
