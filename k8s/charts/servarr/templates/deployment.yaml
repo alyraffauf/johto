@@ -96,6 +96,32 @@ spec:
               value: "911"
             - name: TZ
               value: America/New_York
+            {{- if .Values.database.environment }}
+            - name: POSTGRES_ENABLED
+              value: "true"
+            - name: POSTGRES_DATABASE
+              value: {{ $mainDatabase | quote }}
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: host
+                  name: {{ $databaseSecretName }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ $databaseSecretName }}
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: port
+                  name: {{ $databaseSecretName }}
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: {{ $databaseSecretName }}
+            {{- end }}
           ports:
             - containerPort: {{ $port }}
               name: http
