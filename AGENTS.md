@@ -2,14 +2,16 @@
 
 ## Project Structure & Module Organization
 
-`flake.nix` imports the modules under `nix/`. Shared NixOS settings live in `nix/nixos/`; host composition and hardware state live in `nix/hosts/nixos/<host>/`. Kubernetes workloads are grouped by service in `k8s/<service>/`, reusable charts are under `k8s/charts/`, and Flux resources are under `k8s/flux-system/`. OpenTofu configuration is in `terraform/`, encrypted configuration in `secrets/`, public keys in `keys/`, and utilities in `scripts/`.
+`flake.nix` imports modules under `nix/`. Shared modules live in `nix/nixos/`; host state in `nix/hosts/nixos/<host>/`. VM assets live in `vms/hosts/<host>/`. `k8s/` contains workloads, charts, and Flux resources. OpenTofu is in `terraform/`, encrypted configuration in `secrets/`, public keys in `keys/`, and utilities in `scripts/`.
 
 ## Build, Test, and Development Commands
 
-- `nix develop` enters the pinned development shell with Bun, Just, OpenTofu, SOPS, and repository tooling. Direnv users can run `direnv allow`.
+- `nix develop` enters the pinned shell with Bun, Just, OpenTofu, SOPS, and VM tooling. Direnv users can run `direnv allow`.
 - `nix fmt` runs treefmt across Nix, YAML/JSON/Markdown, and shell files.
 - `nix flake check` evaluates the complete flake and runs configured checks; this is the primary test command.
 - `nix build .#nixosConfigurations.olivine.config.system.build.toplevel` builds one host without activating it. Replace `olivine` with `goldenrod` as needed.
+- `bun run vms/create.ts <host> --check` validates a VM without provisioning it.
+- `nix run .#vm-check -- <host>` and `nix run .#vm-provision -- <host>` run the reproducible VM workflow; the Just recipes are shortcuts.
 - `just` lists maintenance recipes, including `just sops-edit tailscale.yaml` for encrypted secrets.
 
 Run formatting and `nix flake check` before submitting changes. For host-specific work, also build the affected host output.

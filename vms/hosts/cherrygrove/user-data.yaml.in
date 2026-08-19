@@ -1,0 +1,24 @@
+#cloud-config
+hostname: cherrygrove
+manage_etc_hosts: true
+
+users:
+  - name: aly
+    groups: [wheel]
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+@ALY_SSH_KEYS@
+
+packages:
+  - tailscale
+
+write_files:
+  - path: /run/tailscale-auth-key
+    permissions: "0600"
+    content: @TAILSCALE_AUTH_KEY@
+
+runcmd:
+  - systemctl enable --now tailscaled
+  - 'tailscale up --ssh --hostname=cherrygrove --auth-key="$(cat /run/tailscale-auth-key)"'
+  - rm -f /run/tailscale-auth-key
