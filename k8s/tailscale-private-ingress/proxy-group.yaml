@@ -9,18 +9,11 @@ spec:
         - port: 31667
           endPort: 31680
       selector:
-        johto.narwhal-snapper-ts.net/private-ingress: "true"
+        kubernetes.io/hostname: goldenrod
   statefulSet:
     pod:
       nodeSelector:
-        johto.narwhal-snapper-ts.net/private-ingress: "true"
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  tailscale.com/parent-resource: private-ingress
-              topologyKey: kubernetes.io/hostname
+        kubernetes.io/hostname: goldenrod
       tailscaleContainer:
         env:
           - name: TS_EXPERIMENTAL_SERVICE_AUTO_ADVERTISEMENT
@@ -37,5 +30,5 @@ metadata:
   name: private-ingress
 spec:
   proxyClass: private-ingress
-  replicas: 2
+  replicas: 1
   type: ingress

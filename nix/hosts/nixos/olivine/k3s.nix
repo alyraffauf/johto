@@ -3,25 +3,14 @@ _: {
     services.k3s = {
       role = "server";
       clusterInit = true;
-      nodeLabel = [
-        "johto.narwhal-snapper-ts.net/workload=ingress"
-        "johto.narwhal-snapper-ts.net/private-ingress=true"
-      ];
+      nodeLabel = ["johto.narwhal-snapper-ts.net/workload=ingress"];
       nodeTaint = ["johto.narwhal-snapper-ts.net/workload=ingress:NoSchedule"];
 
       extraFlags = [
         "--node-ip=10.254.2.2"
         "--advertise-address=10.254.2.2"
-        "--node-external-ip=51.81.32.154"
       ];
     };
-
-    networking.firewall.allowedUDPPortRanges = [
-      {
-        from = 31667;
-        to = 31680;
-      }
-    ];
 
     services.restic.backups.k3s = {
       paths = [
