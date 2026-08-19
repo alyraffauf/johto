@@ -21,5 +21,11 @@ _: {
       videoCacheSize = "300G";
       videoReadAhead = "5G";
     };
+
+    systemd.tmpfiles.rules = [
+      "d /mnt/Data/apps 0755 root root - -"
+      "d /mnt/Data/cache 0755 root root - -"
+      "d /mnt/Data/user 0755 root root - -"
+    ];
   };
 }

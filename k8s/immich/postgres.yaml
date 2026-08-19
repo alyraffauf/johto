@@ -59,7 +59,7 @@ spec:
       volumes:
         - name: data
           hostPath:
-            path: /mnt/Data/immich/postgres-johto
+            path: /mnt/Data/apps/immich/postgres-johto
             type: DirectoryOrCreate
         - name: shared-memory
           emptyDir:

@@ -221,5 +221,5 @@ spec:
       volumes:
         - name: html
           hostPath:
-            path: /mnt/Data/nextcloud/html
+            path: /mnt/Data/apps/nextcloud/html
             type: Directory

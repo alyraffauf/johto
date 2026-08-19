@@ -145,13 +145,14 @@ spec:
       volumes:
         - {
             name: data,
-            hostPath: { path: /mnt/Data/paperless/data, type: Directory },
+            hostPath: { path: /mnt/Data/apps/paperless/data, type: Directory },
           }
         - {
             name: consume,
-            hostPath: { path: /mnt/Data/paperless/consume, type: Directory },
+            hostPath:
+              { path: /mnt/Data/apps/paperless/consume, type: Directory },
           }
         - {
             name: media,
-            hostPath: { path: /mnt/Data/paperless/media, type: Directory },
+            hostPath: { path: /mnt/Data/apps/paperless/media, type: Directory },
           }

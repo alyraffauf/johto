@@ -53,7 +53,7 @@ spec:
       volumes:
         - name: config
           hostPath:
-            path: /mnt/Data/plex
+            path: /mnt/Data/apps/plex
             type: Directory
         - name: media
           hostPath:

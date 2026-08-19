@@ -5,12 +5,11 @@ _: {
         "--cleanup-cache"
         "--compression max"
         "--no-scan"
-        "--exclude=/mnt/Data/immich/ml-cache"
       ];
       inhibitsSleep = true;
       initialize = true;
       passwordFile = config.sops.secrets.restic-password.path;
-      paths = ["/mnt/Data/immich"];
+      paths = ["/mnt/Data/apps/immich"];
       pruneOpts = [
         "--keep-daily 7"
         "--keep-weekly 4"
@@ -30,7 +29,7 @@ _: {
       inhibitsSleep = true;
       initialize = true;
       passwordFile = config.sops.secrets.restic-password.path;
-      paths = ["/mnt/Data/nextcloud/html"];
+      paths = ["/mnt/Data/apps/nextcloud/html"];
       pruneOpts = [
         "--keep-daily 7"
         "--keep-weekly 4"
@@ -50,7 +49,7 @@ _: {
       inhibitsSleep = true;
       initialize = true;
       passwordFile = config.sops.secrets.restic-password.path;
-      paths = ["/mnt/Data/paperless"];
+      paths = ["/mnt/Data/apps/paperless"];
       pruneOpts = [
         "--keep-daily 7"
         "--keep-weekly 4"
@@ -70,7 +69,7 @@ _: {
       inhibitsSleep = true;
       initialize = true;
       passwordFile = config.sops.secrets.restic-password.path;
-      paths = ["/mnt/Data/uptime-kuma"];
+      paths = ["/mnt/Data/apps/uptime-kuma"];
       pruneOpts = [
         "--keep-daily 7"
         "--keep-weekly 4"

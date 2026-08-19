@@ -45,7 +45,7 @@ spec:
       volumes:
         - name: config
           hostPath:
-            path: /mnt/Data/tautulli
+            path: /mnt/Data/apps/tautulli
             type: Directory
 ---
 apiVersion: v1

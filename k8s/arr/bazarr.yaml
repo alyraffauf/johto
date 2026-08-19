@@ -4,7 +4,7 @@ metadata:
   name: bazarr
   namespace: flux-system
 spec:
-  suspend: false
+  suspend: true
   chart:
     spec:
       chart: ./k8s/charts/servarr
@@ -26,7 +26,7 @@ spec:
       mainDatabase: bazarr
     legacyConfig:
       format: yaml
-      path: /mnt/Data/bazarr
+      path: /mnt/Data/apps/bazarr
     exporter:
       enabled: true
       port: 9708

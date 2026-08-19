@@ -57,7 +57,7 @@ spec:
       volumes:
         - name: data
           hostPath:
-            path: /mnt/Data/uptime-kuma
+            path: /mnt/Data/apps/uptime-kuma
             type: Directory
 ---
 apiVersion: v1

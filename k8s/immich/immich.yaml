@@ -109,7 +109,7 @@ spec:
       volumes:
         - name: cache
           hostPath:
-            path: /mnt/Data/immich/ml-cache
+            path: /mnt/Data/cache/immich
             type: Directory
         - name: dri
           hostPath:
@@ -171,7 +171,7 @@ spec:
       volumes:
         - name: data
           hostPath:
-            path: /mnt/Data/immich
+            path: /mnt/Data/apps/immich
             type: Directory
         - name: config
           secret:

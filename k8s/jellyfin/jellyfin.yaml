@@ -66,11 +66,11 @@ spec:
       volumes:
         - name: config
           hostPath:
-            path: /mnt/Data/jellyfin
+            path: /mnt/Data/apps/jellyfin
             type: Directory
         - name: cache
           hostPath:
-            path: /mnt/Data/jellyfin-cache
+            path: /mnt/Data/cache/jellyfin
             type: Directory
         - name: media
           hostPath:

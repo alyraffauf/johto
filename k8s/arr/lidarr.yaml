@@ -4,7 +4,7 @@ metadata:
   name: lidarr
   namespace: flux-system
 spec:
-  suspend: false
+  suspend: true
   chart:
     spec:
       chart: ./k8s/charts/servarr
@@ -25,7 +25,7 @@ spec:
       logDatabase: lidarr_log
       mainDatabase: lidarr_main
     legacyConfig:
-      path: /mnt/Data/lidarr/.config/Lidarr
+      path: /mnt/Data/apps/lidarr/.config/Lidarr
     exporter:
       enabled: true
       port: 9709

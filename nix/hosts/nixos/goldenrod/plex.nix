@@ -10,12 +10,12 @@ _: {
         "--cleanup-cache"
         "--compression max"
         "--no-scan"
-        "--exclude=/mnt/Data/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases"
+        "--exclude=/mnt/Data/apps/plex/Library/Application Support/Plex Media Server/Plug-in Support/Databases"
       ];
       inhibitsSleep = true;
       initialize = true;
       passwordFile = config.sops.secrets.restic-password.path;
-      paths = ["/mnt/Data/plex"];
+      paths = ["/mnt/Data/apps/plex"];
       pruneOpts = [
         "--keep-daily 7"
         "--keep-weekly 4"
@@ -35,7 +35,7 @@ _: {
       inhibitsSleep = true;
       initialize = true;
       passwordFile = config.sops.secrets.restic-password.path;
-      paths = ["/mnt/Data/tautulli"];
+      paths = ["/mnt/Data/apps/tautulli"];
       pruneOpts = [
         "--keep-daily 7"
         "--keep-weekly 4"

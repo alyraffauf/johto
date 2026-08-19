@@ -4,7 +4,7 @@ metadata:
   name: radarr
   namespace: flux-system
 spec:
-  suspend: false
+  suspend: true
   chart:
     spec:
       chart: ./k8s/charts/servarr
@@ -25,7 +25,7 @@ spec:
       logDatabase: radarr_log
       mainDatabase: radarr_main
     legacyConfig:
-      path: /mnt/Data/radarr/.config/Radarr
+      path: /mnt/Data/apps/radarr/.config/Radarr
     exporter:
       enabled: true
       port: 9711
