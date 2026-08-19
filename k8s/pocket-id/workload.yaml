@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pocket-id
+  namespace: identity
+  labels:
+    app: pocket-id
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: pocket-id
+  template:
+    metadata:
+      labels:
+        app: pocket-id
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+        - name: pocket-id
+          image: ghcr.io/pocket-id/pocket-id:v2@sha256:c9c1d7b70006968d673a1073df048a3fdec73ccb54e182320b56bb911340f6f1
+          env:
+            - name: APP_URL
+              value: https://id.cute.haus
+            - name: TRUST_PROXY
+              value: "true"
+            - name: FILE_BACKEND
+              value: database
+          envFrom:
+            - secretRef:
+                name: pocket-id-env
+          ports:
+            - name: http
+              containerPort: 1411
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 60
+            timeoutSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pocket-id
+  namespace: identity
+  labels:
+    app: pocket-id
+spec:
+  type: ClusterIP
+  selector:
+    app: pocket-id
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
