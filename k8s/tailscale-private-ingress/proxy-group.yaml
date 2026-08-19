@@ -3,6 +3,12 @@ kind: ProxyClass
 metadata:
   name: private-ingress
 spec:
+  staticEndpoints:
+    nodePort:
+      ports:
+        - "31667-31680"
+      selector:
+        kubernetes.io/hostname: olivine
   statefulSet:
     pod:
       nodeSelector:

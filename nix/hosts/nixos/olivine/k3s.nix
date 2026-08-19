@@ -9,8 +9,16 @@ _: {
       extraFlags = [
         "--node-ip=10.254.2.2"
         "--advertise-address=10.254.2.2"
+        "--node-external-ip=51.81.32.154"
       ];
     };
+
+    networking.firewall.allowedUDPPortRanges = [
+      {
+        from = 31667;
+        to = 31680;
+      }
+    ];
 
     services.restic.backups.k3s = {
       paths = [
