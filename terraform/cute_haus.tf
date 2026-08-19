@@ -11,32 +11,20 @@ locals {
   }
 }
 
-# These records remain on Sinnoh until their public names move.  Johto owns
-# the zone, so their temporary target is explicit rather than a remote-state
-# dependency.
-resource "cloudflare_dns_record" "cute_haus_sinnoh_ingress" {
-  for_each = {
-    "vault.cute.haus" = true
-  }
-
+resource "cloudflare_dns_record" "cute_haus_vaultwarden" {
   zone_id  = local.cute_haus_zone
-  name     = each.key
+  name     = "vault.cute.haus"
   type     = "A"
   content  = local.sinnoh_sunnyshore
-  proxied  = each.value
+  proxied  = true
   ttl      = 1
   tags     = []
   settings = {}
 }
 
 moved {
-  from = cloudflare_dns_record.cute_haus_sinnoh_ingress["id.cute.haus"]
-  to   = cloudflare_dns_record.cute_haus_johto_ingress["id.cute.haus"]
-}
-
-moved {
-  from = cloudflare_dns_record.cute_haus_legacy_ingress["slingshot.cute.haus"]
-  to   = cloudflare_dns_record.cute_haus_johto_ingress["slingshot.cute.haus"]
+  from = cloudflare_dns_record.cute_haus_sinnoh_ingress["vault.cute.haus"]
+  to   = cloudflare_dns_record.cute_haus_vaultwarden
 }
 
 resource "cloudflare_dns_record" "cute_haus_johto_ingress" {

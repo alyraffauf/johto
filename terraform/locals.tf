@@ -1,5 +1,4 @@
 locals {
-  legacy_pastoria   = "51.81.87.134"
   olivine           = "51.81.32.154"
   sinnoh_sunnyshore = "40.160.83.152"
 
