@@ -11,6 +11,7 @@
       inputs.disko.nixosModules.disko
       inputs.sops-nix.nixosModules.sops
       self.nixosModules.default
+      self.nixosModules.autoUpgrade
       self.nixosModules.olivine
       self.nixosModules.aly
       self.nixosModules.alloy

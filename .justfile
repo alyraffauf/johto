@@ -147,19 +147,6 @@ bump-tranquil:
 #
 ############################################################################
 
-# Validate a VM definition, cloud-init template, and the Aly SSH key set.
-[group('virtual machines')]
-vm-check HOST:
-    nix run .#vm-check -- {{HOST}}
-
-# Create a VM on the local libvirt host. The Nix app carries its toolchain and
-# elevates only the provisioning command.
-[group('virtual machines')]
-vm-create HOST:
-    nix run .#vm-provision -- {{HOST}}
-
-############################################################################
-#
 #  Darwin
 #
 ############################################################################

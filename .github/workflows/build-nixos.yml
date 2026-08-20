@@ -10,6 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         host:
+          - cherrygrove
           - olivine
           - goldenrod
     steps:

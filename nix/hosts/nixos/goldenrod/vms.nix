@@ -1,33 +1,69 @@
 _: {
-  flake.nixosModules.goldenrod = {pkgs, ...}: let
-    libvirtDefaultNetwork = "default";
-  in {
-    virtualisation.libvirtd = {
-      enable = true;
-      onBoot = "ignore";
-      onShutdown = "shutdown";
+  flake.nixosModules.goldenrod = {
+    config,
+    pkgs,
+    self,
+    ...
+  }: {
+    sops.secrets.cherrygrove-tailscale-auth-key = {
+      key = "tailscale-auth-key";
+      sopsFile = self + "/secrets/tailscale.yaml";
+    };
+    sops.secrets.cherrygrove-aly-password = {
+      key = "aly-password";
+      sopsFile = self + "/secrets/aly-password.yaml";
     };
 
-    systemd.services.libvirt-default-network = {
-      description = "Start the libvirt default network";
-      wantedBy = ["multi-user.target"];
-      after = ["libvirtd.service"];
-      requires = ["libvirtd.service"];
+    systemd.services.cherrygrove-secrets = {
+      before = ["microvm@cherrygrove.service"];
+      requiredBy = ["microvm@cherrygrove.service"];
+
       serviceConfig = {
-        Type = "oneshot";
         RemainAfterExit = true;
+        RuntimeDirectory = "cherrygrove-secrets";
+        RuntimeDirectoryMode = "0750";
+        Type = "oneshot";
       };
+
       script = ''
-        if ! ${pkgs.libvirt}/bin/virsh --connect qemu:///system net-list --name \
-          | ${pkgs.gnugrep}/bin/grep --fixed-strings --line-regexp --quiet ${libvirtDefaultNetwork}; then
-          ${pkgs.libvirt}/bin/virsh --connect qemu:///system net-start ${libvirtDefaultNetwork}
-        fi
+        ${pkgs.coreutils}/bin/install -m 0440 \
+          ${config.sops.secrets.cherrygrove-tailscale-auth-key.path} \
+          "$RUNTIME_DIRECTORY/tailscale-auth-key"
+        ${pkgs.coreutils}/bin/install -m 0400 \
+          ${config.sops.secrets.cherrygrove-aly-password.path} \
+          "$RUNTIME_DIRECTORY/aly-password"
       '';
     };
 
-    systemd.tmpfiles.rules = [
-      "d /mnt/Data/vms 0750 root root - -"
-      "d /var/lib/libvirt/boot 0755 root root - -"
-    ];
+    microvm = {
+      host.useNotifySockets = true;
+      stateDir = "/mnt/Data/microvms";
+
+      vms.cherrygrove = {
+        autostart = true;
+        config = self.nixosModules.cherrygrove;
+        restartIfChanged = true;
+        specialArgs = {inherit self;};
+      };
+    };
+
+    networking = {
+      firewall.trustedInterfaces = ["cherrygrove"];
+      nat = {
+        enable = true;
+        externalInterface = "enp16s0f4u1";
+        internalIPs = ["10.217.0.0/24"];
+      };
+    };
+
+    systemd.network = {
+      enable = true;
+      networks."30-cherrygrove" = {
+        matchConfig.Name = "cherrygrove";
+        address = ["10.217.0.1/32"];
+        routes = [{Destination = "10.217.0.2/32";}];
+        networkConfig.IPv4Forwarding = true;
+      };
+    };
   };
 }
