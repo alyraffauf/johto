@@ -13,7 +13,7 @@ For my personal nix flake, check out [hoenn](https://github.com/alyraffauf/hoenn
 | ------------- | ------------------------------------------------------------------------------------------------------- |
 | `olivine`     | k3s server and control plane, public ingress workloads, private DNS, and etcd backups                   |
 | `goldenrod`   | k3s worker for media workloads, persistent storage, NFS, Garage, observability, and application backups |
-| `cherrygrove` | Persistent NixOS MicroVM hosted by Goldenrod                                                |
+| `cherrygrove` | Persistent NixOS MicroVM hosted by Goldenrod                                                            |
 
 The nodes communicate over a dedicated WireGuard network. Tailscale provides
 private service access, while public services enter through Olivine. Flux

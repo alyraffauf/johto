@@ -1,5 +1,5 @@
 {
-  description = "Personal NixOS, Darwin, and system-manager configurations";
+  description = "NixOS homelab with media + MicroVMs.";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -13,20 +13,10 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
 
-    nix-system-graphics = {
-      url = "github:soupglasses/nix-system-graphics";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
 
     disko = {
       url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -40,22 +30,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-
-    zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    system-manager = {
-      url = "github:numtide/system-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -87,12 +63,6 @@
     ...
   }: let
     sharedPackageSets = {
-      aarch64-darwin = import nixpkgs {
-        system = "aarch64-darwin";
-        config.allowUnfree = true;
-        overlays = [inputs.self.overlays.default];
-      };
-
       x86_64-linux = import nixpkgs {
         system = "x86_64-linux";
         config.allowUnfree = true;
