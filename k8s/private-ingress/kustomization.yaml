@@ -6,6 +6,7 @@ resources:
   - lidarr.yaml
   - navidrome.yaml
   - prowlarr.yaml
+  - qbittorrent.yaml
   - radarr.yaml
   - sonarr.yaml
   - tautulli.yaml
