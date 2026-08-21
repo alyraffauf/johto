@@ -3,28 +3,36 @@
   self,
   ...
 }: {
-  config.flake.nixosConfigurations.goldenrod = inputs.nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
+  config = {
+    flake.nixosConfigurations.goldenrod = inputs.nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
 
-    modules = [
-      inputs.determinate.nixosModules.default
-      inputs.disko.nixosModules.disko
-      inputs.microvm.nixosModules.host
-      inputs.sops-nix.nixosModules.sops
-      self.nixosModules.default
-      self.nixosModules.autoUpgrade
-      self.nixosModules.goldenrod
-      self.nixosModules.aly
-      self.nixosModules.alloy
-      self.nixosModules.backups
-      self.nixosModules.b2media
-      self.nixosModules.k3s
-      self.nixosModules.lanzaboote
-      self.nixosModules.prometheusNode
-      self.nixosModules.tailscale
-      self.nixosModules.wireguardJohto
-    ];
+      modules = [
+        inputs.determinate.nixosModules.default
+        inputs.disko.nixosModules.disko
+        inputs.microvm.nixosModules.host
+        inputs.sops-nix.nixosModules.sops
+        self.nixosModules.default
+        self.nixosModules.autoUpgrade
+        self.nixosModules.goldenrod
+        self.nixosModules.aly
+        self.nixosModules.alloy
+        self.nixosModules.backups
+        self.nixosModules.b2media
+        self.nixosModules.k3s
+        self.nixosModules.lanzaboote
+        self.nixosModules.prometheusNode
+        self.nixosModules.tailscale
+        self.nixosModules.wireguardJohto
+      ];
 
-    specialArgs = {inherit self;};
+      specialArgs = {inherit self;};
+    };
+
+    blzrd.nodes.goldenrod = {
+      output = self.nixosConfigurations.goldenrod.config.system.build.toplevel;
+      type = "nixos";
+      user = "root";
+    };
   };
 }
