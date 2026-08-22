@@ -9,8 +9,16 @@ _: {
 
       jails.sshd.settings = {
         enabled = true;
-        bantime = "1h";
+        bantime = "24h";
         findtime = "10m";
+        maxretry = 5;
+      };
+
+      jails.recidive.settings = {
+        backend = "systemd";
+        bantime = "1w";
+        enabled = true;
+        findtime = "1d";
         maxretry = 5;
       };
     };
