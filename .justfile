@@ -109,40 +109,6 @@ sops-edit FILE:
 
 ############################################################################
 #
-#  Kubernetes
-#
-############################################################################
-
-# Bump Tranquil PDS to the current private ATCR image digest, then commit the
-# chart update. Its Kubernetes image-pull secret is also the registry credential.
-[group('kubernetes')]
-bump-tranquil:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    template=k8s/charts/tranquil-pds/values.yaml
-    image=$(awk '/^image:/ { print $2 }' "$template")
-    repository="${image%%:*}"
-    tag_and_digest="${image#*:}"
-    tag="${tag_and_digest%%@*}"
-    current_digest="${tag_and_digest#*@}"
-    registry_auth=$(sops --decrypt --output-type json secrets/kubernetes/tranquil-pds-atcr-pull.sops.yaml \
-        | jq -r '.data[".dockerconfigjson"]' \
-        | base64 --decode \
-        | jq -r '.auths["atcr.io"].auth' \
-        | base64 --decode)
-    upstream_digest=$(skopeo inspect --creds "$registry_auth" \
-        "docker://${repository}:${tag}" --format '{{"{{"}}.Digest{{"}}"}}')
-    if [[ "$upstream_digest" == "$current_digest" ]]; then
-        echo "tranquil-pds: ✓ up to date"
-        exit 0
-    fi
-    echo "tranquil-pds: ${current_digest:7:12} → ${upstream_digest:7:12}"
-    sed -i "s|@${current_digest}|@${upstream_digest}|" "$template"
-    git add "$template"
-    git commit -m "k8s/tranquil-pds: ${tag}@${current_digest:7:12} → ${tag}@${upstream_digest:7:12}"
-
-############################################################################
-#
 #  NixOS
 #
 ############################################################################

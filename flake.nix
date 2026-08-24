@@ -63,6 +63,12 @@
     ...
   }: let
     sharedPackageSets = {
+      aarch64-darwin = import nixpkgs {
+        system = "aarch64-darwin";
+        config.allowUnfree = true;
+        overlays = [inputs.self.overlays.default];
+      };
+
       x86_64-linux = import nixpkgs {
         system = "x86_64-linux";
         config.allowUnfree = true;
