@@ -12,6 +12,7 @@ _: {
         pkgs.git
         pkgs.just
         pkgs.nh
+        pkgs.nixd
         pkgs.opentofu
         pkgs.sops
         pkgs.ssh-to-age
