@@ -1,37 +1,27 @@
-# Repository Guidelines
+# Work in Johto
 
-## Project Structure & Module Organization
+Johto runs the home lab. `nix/hosts/nixos/` contains Olivine, Goldenrod, and Cherrygrove. `k8s/` contains Flux-managed workloads. `vms/` holds VM assets. `terraform/` manages Cloudflare DNS. Keep secrets in `secrets/` and public SOPS recipients in `keys/`.
 
-`flake.nix` imports modules under `nix/`. Shared modules live in `nix/nixos/`; host state in `nix/hosts/nixos/<host>/`. VM assets live in `vms/hosts/<host>/`. `k8s/` contains workloads, charts, and Flux resources. OpenTofu is in `terraform/`, encrypted configuration in `secrets/`, public keys in `keys/`, and utilities in `scripts/`.
+## Check a change
 
-## Build, Test, and Development Commands
+Run `nix fmt` and `nix flake check` before you commit. Build the changed host.
 
-- `nix develop` enters the pinned shell with Bun, Just, OpenTofu, SOPS, and VM tooling. Direnv users can run `direnv allow`.
-- `nix fmt` runs treefmt across Nix, YAML/JSON/Markdown, and shell files.
-- `nix flake check` evaluates the complete flake and runs configured checks; this is the primary test command.
-- `nix build .#nixosConfigurations.olivine.config.system.build.toplevel` builds one host without activating it. Replace `olivine` with `goldenrod` as needed.
-- `bun run vms/create.ts <host> --check` validates a VM without provisioning it.
-- `nix run .#vm-check -- <host>` and `nix run .#vm-provision -- <host>` run the reproducible VM workflow; the Just recipes are shortcuts.
-- `just` lists maintenance recipes, including `just sops-edit tailscale.yaml` for encrypted secrets.
+```sh
+nix build .#nixosConfigurations.olivine.config.system.build.toplevel
+nix build .#nixosConfigurations.goldenrod.config.system.build.toplevel
+nix build .#nixosConfigurations.cherrygrove.config.system.build.toplevel
+```
 
-Run formatting and `nix flake check` before submitting changes. For host-specific work, also build the affected host output.
+For VM work, run `nix run .#vm-check -- <host>`. Use `nix run .#vm-provision -- <host>` only when you intend to provision the VM.
 
-## Deployments
+When you change a Kubernetes resource, update its `kustomization.yaml` or Flux resource in the same change. For Terraform changes, run `tofu -chdir=terraform fmt -check` and `tofu -chdir=terraform plan` after direnv loads the credentials.
 
-`nix/deployments.nix` registers `olivine` and `goldenrod` as nodes. After validation, run `blzrd switch olivine` or `blzrd switch goldenrod` to activate a host and set its boot default. Use `blzrd boot <host>` to stage without activation. Bare `blzrd switch` targets both nodes; use it deliberately.
+## Deploy deliberately
 
-## Coding Style & Naming Conventions
+Flux deploys Kubernetes changes from `master`. Do not apply repository manifests with `kubectl` unless you are recovering the cluster. Use `blzrd switch olivine` or `blzrd switch goldenrod` only after validation. `blzrd boot <host>` changes the next boot without activating it. A bare `blzrd switch` targets both hosts.
 
-Let `nix fmt` define formatting through Alejandra, deadnix, statix, Prettier, shfmt, and ShellCheck. Use two-space indentation in Nix and YAML. Prefer composable modules and kebab-case filenames such as `prometheus-node.nix`. Keep Kubernetes resource names aligned with their workload and `kustomization.yaml` entries.
+The B2 state backend does not lock OpenTofu state. Review the plan before you apply, and never run concurrent applies.
 
-## Testing Guidelines
+## Keep secrets out of Git
 
-There is no separate unit-test framework or coverage threshold. Treat successful flake evaluation and affected-output builds as required validation. When editing Kubernetes manifests, verify that every added or renamed resource is referenced by the relevant kustomization and Flux definition.
-
-## Commit & Pull Request Guidelines
-
-History follows Conventional Commit-style subjects: `feat(scope): ...`, `fix(scope): ...`, `chore(scope): ...`, and `style(scope): ...`. Use an imperative, concise subject and a scope such as `storage`, `slingshot`, or `opentofu` when useful. Pull requests should explain the operational impact, identify affected hosts/services, link related issues when applicable, and list commands run. Call out migrations, restarts, or rollback concerns explicitly.
-
-## Security & Configuration
-
-Never commit decrypted secrets, private keys, OpenTofu state, or plans. Edit encrypted files through SOPS. After changing recipients in `keys/`, run `just sops-rekey` and review the encrypted diff before committing.
+Do not commit decrypted secrets, private keys, OpenTofu state, or saved plans. Edit secrets through SOPS. When `keys/` changes, run `just sops-rekey` and commit the updated `.sops.yaml` and encrypted files together.
