@@ -14,6 +14,13 @@ _: {
       enable = true;
       tokenFile = config.sops.secrets.k3s-token.path;
       extraFlags = ["--flannel-iface=johto"];
+
+      # Leave ordinary pods their usual 30-second termination budget.
+      gracefulNodeShutdown = {
+        enable = true;
+        shutdownGracePeriod = "45s";
+        shutdownGracePeriodCriticalPods = "10s";
+      };
     };
 
     systemd.services.k3s = {
