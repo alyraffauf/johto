@@ -3,10 +3,7 @@
   self,
   ...
 }: {
-  flake.nixosModules.cherrygrove = {
-    lib,
-    ...
-  }: {
+  flake.nixosModules.cherrygrove = {lib, ...}: {
     imports = [
       inputs.sops-nix.nixosModules.sops
       self.nixosModules.default
