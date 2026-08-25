@@ -12,6 +12,8 @@ nix build .#nixosConfigurations.goldenrod.config.system.build.toplevel
 nix build .#nixosConfigurations.cherrygrove.config.system.build.toplevel
 ```
 
+If a NixOS host's `facter.json` changes, run `nix run github:alyraffauf/infra#generate-host-readmes`. Do not edit text between generated-section markers in a host README.
+
 For VM work, run `nix run .#vm-check -- <host>`. Use `nix run .#vm-provision -- <host>` only when you intend to provision the VM.
 
 When you change a Kubernetes resource, update its `kustomization.yaml` or Flux resource in the same change. For Terraform changes, run `tofu -chdir=terraform fmt -check` and `tofu -chdir=terraform plan` after direnv loads the credentials.

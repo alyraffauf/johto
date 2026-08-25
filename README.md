@@ -57,6 +57,9 @@ nix build .#nixosConfigurations.olivine.config.system.build.toplevel
 nix build .#nixosConfigurations.goldenrod.config.system.build.toplevel
 nix build .#nixosConfigurations.cherrygrove.config.system.build.toplevel
 
+# Refresh the generated host hardware documentation.
+nix run github:alyraffauf/infra#generate-host-readmes
+
 # Discover repository maintenance recipes.
 just
 ```
