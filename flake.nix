@@ -13,6 +13,11 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
     };
 
+    comin = {
+      url = "github:nlewo/comin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
 
     disko = {

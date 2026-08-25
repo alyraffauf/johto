@@ -12,13 +12,14 @@
         inputs.disko.nixosModules.disko
         inputs.microvm.nixosModules.host
         inputs.sops-nix.nixosModules.sops
-        self.nixosModules.default
-        self.nixosModules.autoUpgrade
-        self.nixosModules.goldenrod
-        self.nixosModules.aly
         self.nixosModules.alloy
-        self.nixosModules.backups
+        self.nixosModules.aly
+        self.nixosModules.autoUpgrade
         self.nixosModules.b2media
+        self.nixosModules.backups
+        self.nixosModules.comin
+        self.nixosModules.default
+        self.nixosModules.goldenrod
         self.nixosModules.k3s
         self.nixosModules.lanzaboote
         self.nixosModules.prometheusNode
