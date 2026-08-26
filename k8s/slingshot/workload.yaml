@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: slingshot
-          image: ghcr.io/alyraffauf/slingshot:latest@sha256:9c2e8b0c6c74b8cb802085b8a5b71c62bf8e23b555e429c9b874bd6b5eadd93c
+          image: ghcr.io/alyraffauf/slingshot:latest@sha256:5e571b3559881b02b8dddae4269525d54c3c8cc67b30c509e18d24fcc91b7f63
           env:
             - name: SLINGSHOT_CACHE_DIR
               value: /cache
