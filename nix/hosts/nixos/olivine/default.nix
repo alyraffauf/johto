@@ -13,7 +13,6 @@
         inputs.sops-nix.nixosModules.sops
         self.nixosModules.alloy
         self.nixosModules.aly
-        self.nixosModules.autoUpgrade
         self.nixosModules.backups
         self.nixosModules.comin
         self.nixosModules.default

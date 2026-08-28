@@ -14,7 +14,6 @@
         inputs.sops-nix.nixosModules.sops
         self.nixosModules.alloy
         self.nixosModules.aly
-        self.nixosModules.autoUpgrade
         self.nixosModules.b2media
         self.nixosModules.backups
         self.nixosModules.comin
