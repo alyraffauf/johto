@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pinepods
+  namespace: pinepods
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: pinepods
+  template:
+    metadata:
+      labels:
+        app: pinepods
+    spec:
+      enableServiceLinks: false
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
+      securityContext:
+        fsGroup: 911
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: valkey
+          image: valkey/valkey:8-alpine
+          ports:
+            - name: valkey
+              containerPort: 6379
+        - name: pinepods
+          image: madeofpendletonwool/pinepods:0.9.0
+          envFrom:
+            - secretRef:
+                name: pinepods-env
+          env:
+            - name: DB_HOST
+              value: pg-shared-rw.cnpg-system.svc
+            - name: DB_NAME
+              value: pinepods_database
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_TYPE
+              value: postgresql
+            - name: DB_USER
+              value: pinepods
+            - name: DEBUG_MODE
+              value: "false"
+            - name: DEFAULT_LANGUAGE
+              value: en
+            - name: HOSTNAME
+              value: https://pinepods.narwhal-snapper.ts.net
+            - name: OIDC_AUTHORIZATION_URL
+              value: https://id.cute.haus/authorize
+            - name: OIDC_BUTTON_TEXT
+              value: Login with Pocket ID
+            - name: OIDC_BUTTON_COLOR
+              value: "#1a365d"
+            - name: OIDC_BUTTON_TEXT_COLOR
+              value: "#ffffff"
+            - name: OIDC_CLIENT_ID
+              value: pinepods
+            - name: OIDC_PROVIDER_NAME
+              value: Pocket ID
+            - name: OIDC_SCOPE
+              value: openid email profile
+            - name: OIDC_TOKEN_URL
+              value: https://id.cute.haus/api/oidc/token
+            - name: OIDC_USER_INFO_URL
+              value: https://id.cute.haus/api/oidc/userinfo
+            - name: PEOPLE_API_URL
+              value: https://people.pinepods.online
+            - name: PGID
+              value: "911"
+            - name: PUID
+              value: "911"
+            - name: SEARCH_API_URL
+              value: https://search.pinepods.online/api/search
+            - name: TZ
+              value: America/New_York
+            - name: VALKEY_HOST
+              value: 127.0.0.1
+            - name: VALKEY_PORT
+              value: "6379"
+          ports:
+            - name: http
+              containerPort: 8040
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+          volumeMounts:
+            - name: backups
+              mountPath: /opt/pinepods/backups
+            - name: downloads
+              mountPath: /opt/pinepods/downloads
+            - name: local-media
+              mountPath: /opt/pinepods/local-media
+      volumes:
+        - name: backups
+          hostPath:
+            path: /mnt/Data/apps/pinepods/backups
+            type: DirectoryOrCreate
+        - name: downloads
+          hostPath:
+            path: /mnt/Data/apps/pinepods/downloads
+            type: DirectoryOrCreate
+        - name: local-media
+          hostPath:
+            path: /mnt/Data/apps/pinepods/local-media
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pinepods
+  namespace: pinepods
+spec:
+  selector:
+    app: pinepods
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

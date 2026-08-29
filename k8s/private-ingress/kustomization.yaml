@@ -6,6 +6,7 @@ resources:
   - jellyfin.yaml
   - lidarr.yaml
   - navidrome.yaml
+  - pinepods.yaml
   - prowlarr.yaml
   - qbittorrent.yaml
   - radarr.yaml
