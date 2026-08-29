@@ -4,6 +4,7 @@ resources:
   - cert-manager.yaml
   - cnpg.yaml
   - barman-cloud.yaml
+  - forgejo.yaml
   - gotk-components.yaml
   - gotk-sync.yaml
   - ingress.yaml
