@@ -5,6 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
+    - name: alby
     - name: audiobookshelf
     - name: arr
     - name: forgejo

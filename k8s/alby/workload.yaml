@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: alby
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: albyhub
+  namespace: alby
+spec:
+  replicas: 0
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: albyhub
+  template:
+    metadata:
+      labels:
+        app: albyhub
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
+      terminationGracePeriodSeconds: 300
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: albyhub
+          image: ghcr.io/getalby/hub:v1.24.0@sha256:0227bdc79afd20eb689c922c96cf0546576b608c5cbb07b13658956d54e8133d
+          env:
+            - name: WORK_DIR
+              value: /data/albyhub
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          hostPath:
+            path: /mnt/Data/apps/albyhub
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: albyhub
+  namespace: alby
+spec:
+  selector:
+    app: albyhub
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
