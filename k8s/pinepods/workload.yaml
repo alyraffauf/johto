@@ -57,7 +57,7 @@ spec:
             - name: OIDC_BUTTON_TEXT_COLOR
               value: "#ffffff"
             - name: OIDC_CLIENT_ID
-              value: pinepods
+              value: f41afd2b-650e-4d68-87b2-f179992478db
             - name: OIDC_PROVIDER_NAME
               value: Pocket ID
             - name: OIDC_SCOPE
