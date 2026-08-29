@@ -11,5 +11,6 @@ resources:
   - prowlarr.yaml
   - qbittorrent.yaml
   - radarr.yaml
+  - seerr.yaml
   - sonarr.yaml
   - tautulli.yaml
