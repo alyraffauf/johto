@@ -19,7 +19,6 @@ _: {
       pruneOpts = [
         "--keep-daily 7"
         "--keep-weekly 4"
-        "--keep-monthly 3"
       ];
       rcloneConfigFile = config.sops.secrets.rclone-b2.path;
       timerConfig = {

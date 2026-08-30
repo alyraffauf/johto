@@ -67,7 +67,7 @@ _: {
       extraBackupArgs = ["--cleanup-cache"];
       initialize = true;
       passwordFile = config.sops.secrets.restic-password.path;
-      pruneOpts = ["--keep-daily 7" "--keep-weekly 4" "--keep-monthly 12"];
+      pruneOpts = ["--keep-daily 3" "--keep-weekly 2"];
       rcloneConfigFile = config.sops.secrets.rclone-b2.path;
       timerConfig = {
         OnCalendar = "daily";
