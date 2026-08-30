@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.goldenrod = {config, ...}: {
+  flake.nixosModules.goldenrod = _: {
     services.loki = {
       enable = true;
       configuration = {
@@ -42,21 +42,6 @@ _: {
         ];
 
         analytics.reporting_enabled = false;
-      };
-    };
-
-    services.restic.backups.loki = {
-      paths = ["/var/lib/loki"];
-      repository = "rclone:b2:aly-backups/johto/goldenrod/loki";
-      extraBackupArgs = ["--cleanup-cache"];
-      initialize = true;
-      passwordFile = config.sops.secrets.restic-password.path;
-      pruneOpts = ["--keep-daily 3" "--keep-weekly 2"];
-      rcloneConfigFile = config.sops.secrets.rclone-b2.path;
-      timerConfig = {
-        OnCalendar = "daily";
-        Persistent = true;
-        RandomizedDelaySec = "3h";
       };
     };
   };

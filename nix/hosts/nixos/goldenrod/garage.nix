@@ -101,36 +101,5 @@ _: {
         Group = "garage";
       };
     };
-
-    services.restic.backups.garage = {
-      backupCleanupCommand = "${pkgs.systemd}/bin/systemctl start garage";
-      backupPrepareCommand = "${pkgs.systemd}/bin/systemctl stop garage";
-
-      extraBackupArgs = [
-        "--cleanup-cache"
-        "--compression max"
-        "--no-scan"
-      ];
-
-      inhibitsSleep = true;
-      initialize = true;
-      passwordFile = config.sops.secrets.restic-password.path;
-      paths = ["${dataDirectory}/garage"];
-
-      pruneOpts = [
-        "--keep-daily 7"
-        "--keep-weekly 4"
-        "--keep-monthly 3"
-      ];
-
-      rcloneConfigFile = config.sops.secrets.rclone-b2.path;
-      repository = "rclone:b2:aly-backups/johto/goldenrod/garage";
-
-      timerConfig = {
-        OnCalendar = "daily";
-        Persistent = true;
-        RandomizedDelaySec = "3h";
-      };
-    };
   };
 }

@@ -1,5 +1,5 @@
 _: {
-  flake.nixosModules.goldenrod = {config, ...}: {
+  flake.nixosModules.goldenrod = _: {
     services.prometheus = {
       enable = true;
       port = 3020;
@@ -59,21 +59,6 @@ _: {
     services.resolved.settings.Resolve = {
       DNS = ["10.43.0.10"];
       Domains = ["~svc.cluster.local"];
-    };
-
-    services.restic.backups.prometheus = {
-      paths = ["/var/lib/prometheus2"];
-      repository = "rclone:b2:aly-backups/johto/goldenrod/prometheus";
-      extraBackupArgs = ["--cleanup-cache"];
-      initialize = true;
-      passwordFile = config.sops.secrets.restic-password.path;
-      pruneOpts = ["--keep-daily 3" "--keep-weekly 2"];
-      rcloneConfigFile = config.sops.secrets.rclone-b2.path;
-      timerConfig = {
-        OnCalendar = "daily";
-        Persistent = true;
-        RandomizedDelaySec = "3h";
-      };
     };
   };
 }
