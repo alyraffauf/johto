@@ -1,5 +1,85 @@
 _: {
   flake.nixosModules.goldenrod = {config, ...}: {
+    services.restic.backups.albyhub = {
+      extraBackupArgs = ["--cleanup-cache" "--compression max" "--no-scan"];
+      inhibitsSleep = true;
+      initialize = true;
+      passwordFile = config.sops.secrets.restic-password.path;
+      paths = ["/mnt/Data/apps/albyhub"];
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 3"
+      ];
+      rcloneConfigFile = config.sops.secrets.rclone-b2.path;
+      repository = "rclone:b2:aly-backups/johto/goldenrod/albyhub";
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+        RandomizedDelaySec = "3h";
+      };
+    };
+
+    services.restic.backups.audiobookshelf = {
+      extraBackupArgs = ["--cleanup-cache" "--compression max" "--no-scan"];
+      inhibitsSleep = true;
+      initialize = true;
+      passwordFile = config.sops.secrets.restic-password.path;
+      paths = ["/mnt/Data/apps/audiobookshelf"];
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 3"
+      ];
+      rcloneConfigFile = config.sops.secrets.rclone-b2.path;
+      repository = "rclone:b2:aly-backups/johto/goldenrod/audiobookshelf";
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+        RandomizedDelaySec = "3h";
+      };
+    };
+
+    services.restic.backups.forgejo = {
+      extraBackupArgs = ["--cleanup-cache" "--compression max" "--no-scan"];
+      inhibitsSleep = true;
+      initialize = true;
+      passwordFile = config.sops.secrets.restic-password.path;
+      paths = ["/mnt/Data/apps/forgejo"];
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 3"
+      ];
+      rcloneConfigFile = config.sops.secrets.rclone-b2.path;
+      repository = "rclone:b2:aly-backups/johto/goldenrod/forgejo";
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+        RandomizedDelaySec = "3h";
+      };
+    };
+
+    services.restic.backups.seerr = {
+      extraBackupArgs = ["--cleanup-cache" "--compression max" "--no-scan"];
+      inhibitsSleep = true;
+      initialize = true;
+      passwordFile = config.sops.secrets.restic-password.path;
+      paths = ["/mnt/Data/apps/seerr"];
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 3"
+      ];
+      rcloneConfigFile = config.sops.secrets.rclone-b2.path;
+      repository = "rclone:b2:aly-backups/johto/goldenrod/seerr";
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+        RandomizedDelaySec = "3h";
+      };
+    };
+
     services.restic.backups.immich = {
       extraBackupArgs = [
         "--cleanup-cache"

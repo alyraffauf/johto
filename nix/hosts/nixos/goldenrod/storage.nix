@@ -24,7 +24,13 @@ _: {
 
     systemd.tmpfiles.rules = [
       "d /mnt/Data/apps 0755 root root - -"
+      "d /mnt/Data/apps/albyhub 0755 root root - -"
+      "d /mnt/Data/apps/audiobookshelf 0755 root root - -"
+      "d /mnt/Data/apps/audiobookshelf/config 0755 root root - -"
+      "d /mnt/Data/apps/audiobookshelf/metadata 0755 root root - -"
+      "d /mnt/Data/apps/forgejo 0755 root root - -"
       "d /mnt/Data/apps/qbittorrent 0750 888 888 - -"
+      "d /mnt/Data/apps/seerr 0755 1000 1000 - -"
       "d /mnt/Data/apps/jellyfin 0755 root root - -"
       "d /mnt/Data/cache 0755 root root - -"
       "d /mnt/Data/cache/jellyfin 0755 root root - -"
