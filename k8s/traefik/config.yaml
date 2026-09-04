@@ -1,0 +1,13 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    additionalArguments:
+      - --accesslog.fields.queryparameters.defaultmode=drop
+    logs:
+      access:
+        enabled: true
+        format: json
