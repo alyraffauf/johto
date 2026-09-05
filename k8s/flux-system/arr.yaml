@@ -7,6 +7,7 @@ spec:
   suspend: false
   dependsOn:
     - name: cnpg
+    - name: postgres
   interval: 10m
   path: ./k8s/arr
   prune: true
