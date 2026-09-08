@@ -29,7 +29,7 @@ spec:
           image: ghcr.io/alyraffauf/skytrace:latest@sha256:3e9aff80062250cba630dbbb9105ee89e1ce68d9a2778dbfcc1fd8e1a7271da7
           env:
             - name: SKYTRACE_IGNORE_NO_UNAUTHENTICATED
-              value: true
+              value: "true"
           ports:
             - name: http
               containerPort: 80
