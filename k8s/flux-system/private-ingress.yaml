@@ -11,6 +11,7 @@ spec:
     - name: forgejo
     - name: pinepods
     - name: plex
+    - name: skytrace
     - name: tailscale-private-ingress
   interval: 10m
   path: ./k8s/private-ingress

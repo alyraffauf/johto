@@ -13,5 +13,6 @@ resources:
   - qbittorrent.yaml
   - radarr.yaml
   - seerr.yaml
+  - skytrace.yaml
   - sonarr.yaml
   - tautulli.yaml
