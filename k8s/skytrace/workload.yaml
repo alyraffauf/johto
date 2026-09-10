@@ -26,7 +26,7 @@ spec:
               app: skytrace
       containers:
         - name: skytrace
-          image: ghcr.io/alyraffauf/skytrace:latest@sha256:05bcc40212ef3570ba0596610cfc70238a42f1d9f08bdae49d190399cb606ce7
+          image: ghcr.io/alyraffauf/skytrace:latest@sha256:1ac2c27864cd5b248c1b79ab6f3b0c2097dd82b6abaea87bb2c8abc2157b719f
           env:
             - name: SKYTRACE_IGNORE_NO_UNAUTHENTICATED
               value: "true"
