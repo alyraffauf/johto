@@ -64,7 +64,7 @@ spec:
               --maxmemory,
               1gb,
               --maxmemory-policy,
-              volatile-lru,
+              noeviction,
             ]
           volumeMounts:
             - name: data
