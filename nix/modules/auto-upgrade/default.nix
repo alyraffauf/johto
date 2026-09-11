@@ -2,12 +2,12 @@ _: {
   flake.nixosModules.autoUpgrade = {config, ...}: {
     system.autoUpgrade = {
       enable = true;
-      allowReboot = true;
+      allowReboot = false;
       dates = "02:00";
       fixedRandomDelay = true;
       flake = "github:alyraffauf/johto#${config.networking.hostName}";
       flags = ["--accept-flake-config"];
-      operation = "switch";
+      operation = "boot";
       persistent = true;
       randomizedDelaySec = "45min";
       upgrade = false;

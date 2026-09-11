@@ -16,6 +16,7 @@
         self.nixosModules.aly
         self.nixosModules.b2media
         self.nixosModules.backups
+        self.nixosModules.autoUpgrade
         self.nixosModules.comin
         self.nixosModules.default
         self.nixosModules.goldenrod
