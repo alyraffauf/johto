@@ -49,6 +49,9 @@ spec:
             exec:
               command: [pg_isready, --username, immich, --dbname, immich]
           resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
             limits:
               memory: 3Gi
           volumeMounts:

@@ -49,6 +49,17 @@ spec:
           image: valkey/valkey:9-alpine@sha256:a0dbf4c1d5708782907c10e2c72deff317518518b5288a58416981d9db95d30b
           args:
             [valkey-server, --maxmemory, 1gb, --maxmemory-policy, volatile-lru]
+          startupProbe:
+            tcpSocket: { port: 6379 }
+            failureThreshold: 30
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: 6379 }
+          readinessProbe:
+            tcpSocket: { port: 6379 }
+          resources:
+            requests: { cpu: 25m, memory: 512Mi }
+            limits: { memory: 1250Mi }
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -63,6 +74,17 @@ spec:
       containers:
         - name: tika
           image: apache/tika:3.3.1.0-full@sha256:d8e6ed96260ad89307a93195a1b856102987a818ac648502f8efbaf313d32470
+          startupProbe:
+            tcpSocket: { port: 9998 }
+            failureThreshold: 60
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: 9998 }
+          readinessProbe:
+            tcpSocket: { port: 9998 }
+          resources:
+            requests: { cpu: 100m, memory: 512Mi }
+            limits: { memory: 1Gi }
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -77,6 +99,17 @@ spec:
       containers:
         - name: gotenberg
           image: gotenberg/gotenberg:8@sha256:f29984bd1e226bf1b93ba90af06000afa8b315853e99d27b9aaa41b93f15c769
+          startupProbe:
+            httpGet: { path: /health, port: 3000 }
+            failureThreshold: 60
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /health, port: 3000 }
+          readinessProbe:
+            httpGet: { path: /health, port: 3000 }
+          resources:
+            requests: { cpu: 50m, memory: 128Mi }
+            limits: { memory: 512Mi }
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -138,6 +171,17 @@ spec:
             - { name: USERMAP_GID, value: "1000" }
             - { name: USERMAP_UID, value: "1000" }
           ports: [{ containerPort: 8000 }]
+          startupProbe:
+            tcpSocket: { port: 8000 }
+            failureThreshold: 60
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: 8000 }
+          readinessProbe:
+            tcpSocket: { port: 8000 }
+          resources:
+            requests: { cpu: 100m, memory: 1Gi }
+            limits: { memory: 2Gi }
           volumeMounts:
             - { name: data, mountPath: /paperless/data }
             - { name: consume, mountPath: /paperless/consume }

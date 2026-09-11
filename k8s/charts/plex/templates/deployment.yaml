@@ -39,8 +39,19 @@ spec:
             - containerPort: 32400
               name: http
           resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
             limits:
               memory: 4Gi
+          startupProbe:
+            tcpSocket: {port: http}
+            failureThreshold: 60
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: {port: http}
+          readinessProbe:
+            tcpSocket: {port: http}
           volumeMounts:
             - name: config
               mountPath: /config

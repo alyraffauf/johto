@@ -69,6 +69,17 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
+          startupProbe:
+            tcpSocket: { port: 6379 }
+            failureThreshold: 30
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: 6379 }
+          readinessProbe:
+            tcpSocket: { port: 6379 }
+          resources:
+            requests: { cpu: 25m, memory: 128Mi }
+            limits: { memory: 384Mi }
       volumes:
         - name: data
           emptyDir: {}
@@ -106,8 +117,19 @@ spec:
           ports:
             - containerPort: 9980
           resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
             limits:
               memory: 4Gi
+          startupProbe:
+            tcpSocket: { port: 9980 }
+            failureThreshold: 60
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: 9980 }
+          readinessProbe:
+            tcpSocket: { port: 9980 }
           securityContext:
             capabilities:
               add: [MKNOD]
@@ -191,8 +213,19 @@ spec:
           ports:
             - containerPort: 80
           resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
             limits:
               memory: 4Gi
+          startupProbe:
+            httpGet: { path: /status.php, port: 80 }
+            failureThreshold: 60
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /status.php, port: 80 }
+          readinessProbe:
+            httpGet: { path: /status.php, port: 80 }
           volumeMounts:
             - name: html
               mountPath: /var/www/html
@@ -215,6 +248,9 @@ spec:
           securityContext:
             runAsUser: 33
             runAsGroup: 33
+          resources:
+            requests: { cpu: 25m, memory: 64Mi }
+            limits: { memory: 128Mi }
           volumeMounts:
             - name: html
               mountPath: /var/www/html

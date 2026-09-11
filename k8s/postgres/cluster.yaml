@@ -12,6 +12,12 @@ spec:
       source: pg-shared-original
   imageName: ghcr.io/cloudnative-pg/postgresql:18.6@sha256:d7a81cb5da3182d95d0da5fabfb9e484e375db899dcd54b684105f1e8966e9ca
   instances: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 2Gi
   managed:
     roles:
       - name: media

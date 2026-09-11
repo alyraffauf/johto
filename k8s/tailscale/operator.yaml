@@ -25,6 +25,13 @@ spec:
   interval: 30m
   releaseName: tailscale-operator
   targetNamespace: tailscale
+  values:
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        memory: 128Mi
   valuesFrom:
     - kind: Secret
       name: tailscale-operator-values

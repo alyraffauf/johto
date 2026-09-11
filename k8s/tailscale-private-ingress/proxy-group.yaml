@@ -15,6 +15,12 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: goldenrod
       tailscaleContainer:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 96Mi
+          limits:
+            memory: 192Mi
         env:
           - name: TS_EXPERIMENTAL_SERVICE_AUTO_ADVERTISEMENT
             value: "true"
