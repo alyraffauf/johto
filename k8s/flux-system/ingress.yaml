@@ -14,6 +14,7 @@ spec:
     - name: watsup
     - name: ombi
     - name: pocket-id
+    - name: happyview
   interval: 10m
   path: ./k8s/ingress
   prune: true

@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: happyview
+  namespace: happyview
+  labels:
+    app: happyview
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: happyview
+  template:
+    metadata:
+      labels:
+        app: happyview
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: happyview
+          image: ghcr.io/gamesgamesgamesgamesgames/happyview:2.13.0
+          envFrom:
+            - secretRef:
+                name: happyview-env
+          ports:
+            - name: http
+              containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: happyview
+  namespace: happyview
+spec:
+  selector:
+    app: happyview
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

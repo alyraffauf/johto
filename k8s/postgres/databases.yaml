@@ -1,6 +1,17 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
+  name: happyview
+  namespace: cnpg-system
+spec:
+  cluster:
+    name: pg-shared
+  name: happyview
+  owner: happyview
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
   name: nextcloud
   namespace: cnpg-system
 spec:

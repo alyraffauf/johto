@@ -1,0 +1,35 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: appview-cute-haus
+  namespace: happyview
+spec:
+  dnsNames:
+    - appview.cute.haus
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: appview-cute-haus-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: happyview
+  namespace: happyview
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: appview.cute.haus
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: happyview
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - appview.cute.haus
+      secretName: appview-cute-haus-tls

@@ -15,7 +15,7 @@ keys:
   - &host_olivine age14pn3ukj9n38lx7fxc07qgdx34jedwrx8vhve5x06tyanff7hlgws3xgpvn
 
 creation_rules:
-  - path_regex: ^secrets/.*\.ya?ml$
+  - path_regex: ^(secrets|k8s/secrets)/.*\.ya?ml$
     key_groups:
       - age:
           - *user_aly_fortree

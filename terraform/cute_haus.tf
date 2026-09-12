@@ -1,5 +1,6 @@
 locals {
   cute_haus_johto_ingress = {
+    "appview.cute.haus"   = true
     "collabora.cute.haus" = false
     "cute.haus"           = true
     "id.cute.haus"        = true

@@ -10,6 +10,7 @@ resources:
   - forgejo.yaml
   - gotk-components.yaml
   - gotk-sync.yaml
+  - happyview.yaml
   - ingress.yaml
   - immich.yaml
   - jellyfin.yaml
