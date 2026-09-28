@@ -21,23 +21,13 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
-      initContainers:
-        - name: copy-settings
-          image: searxng/searxng:latest@sha256:a31763b7af3caf6ae9aac1816ba774214eb550252e06a4998f276ded8d60461b
-          command:
-            - /bin/sh
-            - -ec
-            - cp /config/settings.yml /etc/searxng/settings.yml
-          volumeMounts:
-            - name: settings
-              mountPath: /config
-              readOnly: true
-            - name: config
-              mountPath: /etc/searxng
       containers:
         - name: searxng
           image: searxng/searxng:latest@sha256:a31763b7af3caf6ae9aac1816ba774214eb550252e06a4998f276ded8d60461b
           env:
+            # ConfigMap mounts are read-only; the entrypoint must not chown them.
+            - name: FORCE_OWNERSHIP
+              value: "false"
             - name: SEARXNG_SECRET
               valueFrom:
                 secretKeyRef:
@@ -68,16 +58,15 @@ spec:
             limits:
               memory: 1Gi
           volumeMounts:
-            - name: config
+            - name: settings
               mountPath: /etc/searxng
+              readOnly: true
             - name: cache
               mountPath: /var/cache/searxng
       volumes:
         - name: settings
           configMap:
             name: searxng-settings
-        - name: config
-          emptyDir: {}
         - name: cache
           emptyDir: {}
 ---
