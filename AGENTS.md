@@ -26,6 +26,10 @@ tofu -chdir=terraform fmt -check
 tofu -chdir=terraform plan
 ```
 
+## Commit messages
+
+Use scoped Conventional Commits: `fix(<scope>): <description>` for fixes and `feat(<scope>): <description>` for new features. Choose a program, module, or path as the scope. For example, `fix(searxng): mount settings without an init container` or `feat(k8s): add a private search service`.
+
 ## Deploy deliberately
 
 Flux deploys Kubernetes changes from `master`. Do not apply repository manifests with `kubectl` unless you are recovering the cluster. Use `blzrd switch olivine` or `blzrd switch goldenrod` only after validation. `blzrd boot <host>` changes the next boot without activating it. A bare `blzrd switch` targets both hosts.
