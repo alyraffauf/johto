@@ -4,7 +4,7 @@ _: {
     lib,
     ...
   }: let
-    defaultSwapSizeMiB = 8192;
+    defaultSwapSizeMiB = 4096;
     kibibytesPerMebibyte = 1024;
     memoryDevices = config.hardware.facter.report.smbios.memory_device or [];
     installedMemoryKiB =
@@ -16,7 +16,7 @@ _: {
     installedMemoryMiB = builtins.div installedMemoryKiB kibibytesPerMebibyte;
     swapSizeMiB =
       if installedMemoryMiB > 0
-      then installedMemoryMiB
+      then builtins.div installedMemoryMiB 2
       else defaultSwapSizeMiB;
   in {
     swapDevices = [
