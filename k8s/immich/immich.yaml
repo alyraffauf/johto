@@ -104,7 +104,7 @@ spec:
         johto.narwhal-snapper-ts.net/workload: media
       containers:
         - name: machine-learning
-          image: ghcr.io/immich-app/immich-machine-learning:v3.2.2-openvino@sha256:6b2ad79e5eb47b94bb0ce187ce852442983a288ef49d964e58c9e20fb3bf3a48
+          image: ghcr.io/immich-app/immich-machine-learning:v3.2.4-openvino@sha256:9249078942f49455c0b8ed9d2d986a6e754b9401d966ba93e32f8a2c4946dd0c
           env:
             - { name: MACHINE_LEARNING_CACHE_FOLDER, value: /cache }
           ports:
@@ -160,7 +160,7 @@ spec:
         johto.narwhal-snapper-ts.net/workload: media
       containers:
         - name: immich
-          image: ghcr.io/immich-app/immich-server:v3.2.2@sha256:79cc1623323d5894922686d8743b4780181428f98eecbfb58ce12c41ef02d1ea
+          image: ghcr.io/immich-app/immich-server:v3.2.4@sha256:d317916b28090c33eb36b308464ea391f8b7df1d850fcfea227a39ec879718c2
           env:
             - { name: DB_DATABASE_NAME, value: immich }
             - { name: DB_HOSTNAME, value: postgres }
