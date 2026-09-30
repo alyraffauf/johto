@@ -2,11 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: skytrace
-  namespace: skytrace
+  namespace: websites
   labels:
     app: skytrace
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: skytrace
@@ -17,13 +17,8 @@ spec:
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels:
-              app: skytrace
+      nodeSelector:
+        johto.narwhal-snapper-ts.net/workload: media
       containers:
         - name: skytrace
           image: ghcr.io/alyraffauf/skytrace:latest@sha256:d08db2a2e9ee6a1be1c3bbe9d19a776455129278c631f6c2ade316d928e77208
@@ -53,7 +48,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: skytrace
-  namespace: skytrace
+  namespace: websites
 spec:
   selector:
     app: skytrace

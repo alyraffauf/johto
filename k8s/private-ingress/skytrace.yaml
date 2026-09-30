@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: skytrace-johto
-  namespace: skytrace
+  namespace: websites
   annotations:
     tailscale.com/proxy-group: private-ingress
 spec:
