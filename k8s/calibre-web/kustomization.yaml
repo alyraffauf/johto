@@ -4,3 +4,4 @@ resources:
   - workload.yaml
 patches:
   - path: lan-access.yaml
+  - path: conversion.yaml
