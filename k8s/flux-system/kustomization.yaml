@@ -4,6 +4,7 @@ resources:
   - alby.yaml
   - alloy.yaml
   - audiobookshelf.yaml
+  - calibre-web.yaml
   - cert-manager.yaml
   - cnpg.yaml
   - barman-cloud.yaml

@@ -8,6 +8,7 @@ spec:
     - name: alby
     - name: audiobookshelf
     - name: arr
+    - name: calibre-web
     - name: forgejo
     - name: pinepods
     - name: plex

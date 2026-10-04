@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - alby.yaml
   - audiobookshelf.yaml
+  - calibre-web.yaml
   - bazarr.yaml
   - forgejo.yaml
   - jellyfin.yaml
