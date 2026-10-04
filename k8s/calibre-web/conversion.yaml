@@ -11,3 +11,12 @@ spec:
           env:
             - name: DOCKER_MODS
               value: linuxserver/mods:universal-calibre
+          volumeMounts:
+            - name: custom-init
+              mountPath: /custom-cont-init.d
+              readOnly: true
+      volumes:
+        - name: custom-init
+          configMap:
+            name: calibre-web-init
+            defaultMode: 0555
